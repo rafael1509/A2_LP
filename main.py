@@ -1,40 +1,13 @@
 import pygame, os, random, json
 from datetime import datetime
+from game_configs import *
 
 pygame.init()
 clock=pygame.time.Clock()
 directory = os.path.dirname(os.path.realpath(__file__))
 
-########## VENTANA ########## 
-
-SCREENWIDTH=800
-SCREENHEIGHT=500
-size = (SCREENWIDTH, SCREENHEIGHT)
-screen = pygame.display.set_mode(size)
-
-pygame.display.set_caption("Pyroad Driver")
-os.environ['SDL_VIDEO_CENTERED'] = '1'
-                   
-########## COLORS ########## 
-
-RED = (255, 0, 0)
-GREEN = (20, 255, 140)
-BLUE = (100, 100, 255)
-GREY = (210, 210 ,210)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-MAGENTA = (194,9,84)
-
-########## BACKGROUNDS ########## 
-
-menuBg = pygame.image.load(directory + "\\sprites\\menuBg.png").convert_alpha()
-
-########## FONTS ########## 
-
-myfont = pygame.font.SysFont('Lucida Console', 20)
 
 ########## GLOBAL VARIABLES ########## 
-global userName, energy, points, date, speed, first, fullscreen
 userName = str
 energy = 3
 points = 0
@@ -43,11 +16,6 @@ speed = 5
 first = True
 fullscreen = False
 
-########## SOUNDS ########## 
-
-soundCrash = pygame.mixer.Sound(directory + "\\sounds\\crash.wav")
-soundPoints = pygame.mixer.Sound(directory + "\\sounds\\diamond.wav")
-soundGameOver = pygame.mixer.Sound(directory + "\\sounds\\gameOver.wav")
 
 ########## CLASSES, INSTANCES, GROUPS ########## 
 
@@ -91,6 +59,8 @@ class enemyCar(pygame.sprite.Sprite):
             self.rect.y += speed
         else:
             self.kill()
+        if self.rect.x < 400:
+            self.rect.y += round(speed/2)
 
 enemyCar1 = enemyCar(1, 200)
 enemyCarGroup = pygame.sprite.Group()
@@ -340,7 +310,6 @@ def msg(text,btnfnc):
                     changescn(btnfnc)
 
 ##### change music
-
 def playMusic(music):
 
     if music == "main":
@@ -354,29 +323,9 @@ def playMusic(music):
         
     elif music == "stop":
         pygame.mixer.music.stop()
-        
-##### general function
-          
-def fnc(): # this funcion is called in every scene
-    
-    ##### fullscreen
-    
-    global fullscreen
-    all_keys = pygame.key.get_pressed()
-    if all_keys[pygame.K_f] and (all_keys[pygame.K_LSHIFT] or all_keys[pygame.K_RSHIFT]):
-        
-        fullscreen = not fullscreen
-        if fullscreen == True:
-            pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        else:
-            pygame.display.set_mode(size)
-            
-
-            
-          
+             
             
 ##### save score
-
 sortedData = []
 data = {}
 def saveGame():
@@ -423,7 +372,6 @@ def heart_action():
     heartGroup.add(heart)
     
 ##### display HUD function
-
 def hud():
     
     global energy, userName, points, speed
@@ -554,12 +502,9 @@ def menu():
     sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
 
     while menu_s:
-        
-        fnc()
-        
+
         ##### RENDER #####
-        
-        screen.blit(menuBg, (0, 0))
+        screen.blit(menu_background, (0, 0))
         playBtn.draw(screen, (0,0,0))
         scoresBtn.draw(screen, (0,0,0))
         instBtn.draw(screen, (0,0,0))
@@ -681,11 +626,8 @@ def scores():
 
     global scores_s
     while scores_s:
-        
-        fnc()
-        
+
         ##### RENDER #####
-        
         screen.fill(MAGENTA)
         
         pygame.draw.rect(screen,BLACK,(90,20,600,400))
@@ -751,15 +693,11 @@ def instructions():
     label0 = myfont.render("Instructions:", 1, WHITE, BLUE)
     label1 = myfont.render("- Drive through the higway and dont crash", 1, WHITE, BLUE)
     label2 = myfont.render("- Use A and D keys to move your car", 1, WHITE, BLUE)
-    label3 = myfont.render("- Use F key for Full Screen Mode", 1, WHITE, BLUE)
-    label4 = myfont.render("- Catch all the deamons you can to earn points", 1, WHITE, BLUE)
+    label3 = myfont.render("- Catch all the diamonds you can to earn points", 1, WHITE, BLUE)
     
     while instructions_s:
         
-        fnc()
-        
         ##### RENDER #####
-            
         screen.fill(MAGENTA)
         
         pygame.draw.rect(screen,BLACK,(25,20,750,400))
@@ -767,8 +705,7 @@ def instructions():
         screen.blit(label0, (30, 30))
         screen.blit(label1, (100, 100))
         screen.blit(label2, (100, 150))
-        screen.blit(label3, (100, 200))
-        screen.blit(label4, (100, 250))
+        screen.blit(label3, (100, 250))
 
   
         backBtn.draw(screen, (0,0,0))
@@ -807,11 +744,10 @@ def enterName():
     labelEnterName = myfont.render("Enter user name:", 1, BLACK)
 
     while enterName_s:
-        
-        fnc()
+
         ##### RENDER #####
         
-        screen.blit(menuBg, (0, 0)) 
+        screen.blit(menu_background, (0, 0)) 
         enterOkBtn.draw(screen, (0,0,0)) 
         enterBackBtn.draw(screen, (0,0,0))
 
@@ -867,9 +803,7 @@ def mainLoop():
     playMusic("engine")
     
     while mainLoop_s:
-        
-        fnc()
-        
+
         ##### clock
         count += 1
         if count > 10:
@@ -954,11 +888,3 @@ def mainLoop():
 playMusic("main")
 menu()
 pygame.quit()
-
-# porque no puedo hacer full screen en menu
-
-
-
-
-
-
