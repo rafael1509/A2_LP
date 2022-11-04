@@ -1,5 +1,4 @@
-import pygame
-import os, random, json
+import pygame, os, random, json
 from datetime import datetime
 
 pygame.init()
@@ -39,7 +38,7 @@ userName = str
 energy = 100
 points = 0
 date = str
-speed = 4
+speed = 5
 first = True
 fullscreen = False
 
@@ -89,9 +88,7 @@ class enemyCar(pygame.sprite.Sprite):
         
         if self.rect.y < 650:
             self.rect.y += speed
-        if self.rect.x < 400:
-            self.rect.y += speed/2
-        elif self.rect.y >= 650:
+        else:
             self.kill()
 
 enemyCar1 = enemyCar(1, 200)
@@ -402,7 +399,7 @@ def things():
     soundPoints.play()
     thing1.rect.y = 600
     thingGroup.add(thing1)
-    speed += 0.5
+    speed += 1
     
 ##### display HUD function
 
@@ -497,7 +494,7 @@ def resetGame():
     input_box1.update
     energy = 100
     points = 0
-    speed = 4
+    speed = 5
    
     now = datetime.now()
     date = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -915,7 +912,6 @@ menu()
 pygame.quit()
 
 # porque no puedo hacer full screen en menu
-
 
 
 
