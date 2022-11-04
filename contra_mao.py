@@ -39,9 +39,10 @@ userName = str
 energy = 100
 points = 0
 date = str
-speed = 4
+speed = 5
 first = True
 fullscreen = False
+rotacao = False
 
 ########## SOUNDS ########## 
 
@@ -84,11 +85,14 @@ class enemyCar(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x = self.lane
         self.rect.y = -100
-        
+
     def moveForward(self):
         
+        global rotacao
+
         if self.rect.y < 650:
             self.rect.y += speed
+
         if self.rect.x < 400:
             self.rect.y += speed/2
         elif self.rect.y >= 650:
@@ -402,7 +406,8 @@ def things():
     soundPoints.play()
     thing1.rect.y = 600
     thingGroup.add(thing1)
-    speed += 0.5
+    if points%3 == 1:
+        speed += 1
     
 ##### display HUD function
 

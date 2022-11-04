@@ -38,6 +38,7 @@ global userName, energy, points, date, speed, first, fullscreen
 userName = str
 energy = 3
 points = 0
+pointz = 0
 date = str
 speed = 5
 first = True
@@ -353,27 +354,7 @@ def playMusic(music):
         pygame.mixer.music.play(-1)
         
     elif music == "stop":
-        pygame.mixer.music.stop()
-        
-##### general function
-          
-def fnc(): # this funcion is called in every scene
-    
-    ##### fullscreen
-    
-    global fullscreen
-    all_keys = pygame.key.get_pressed()
-    if all_keys[pygame.K_f] and (all_keys[pygame.K_LSHIFT] or all_keys[pygame.K_RSHIFT]):
-        
-        fullscreen = not fullscreen
-        if fullscreen == True:
-            pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        else:
-            pygame.display.set_mode(size)
-            
-
-            
-          
+        pygame.mixer.music.stop()  
             
 ##### save score
 
@@ -406,7 +387,7 @@ def diamond_action():
     
     global points, speed
  
-    points += 1
+    points += 1000
     soundPoints.play()
     diamond.rect.y = 600
     diamondGroup.add(diamond)
@@ -426,9 +407,14 @@ def heart_action():
 
 def hud():
     
-    global energy, userName, points, speed
-    points += 1
-    if points % 1000 == 0:
+    global energy, userName, points, pointz, speed, playerKar
+    if playerKar.rect.x < 400:
+        pointz += 1
+        points += 1
+    else:
+        points += 1
+
+    if points%500 == 1:
         speed +=1
     
     label0 = myfont.render("Name: " + str(userName), 1, WHITE, BLACK)
@@ -437,7 +423,7 @@ def hud():
     label1 = myfont.render("Energy: " + str(energy), 1, WHITE, BLACK)
     screen.blit(label1, (610, 50))
 
-    label2 = myfont.render("Points: " + str(points), 1, WHITE, BLACK)
+    label2 = myfont.render("Points: " + str(pointz+points), 1, WHITE, BLACK)
     screen.blit(label2, (610, 80))
 
     label3 = myfont.render("Speed: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
@@ -511,7 +497,7 @@ def crash(value):
 ##### reset game
 
 def resetGame():
-    global userName, energy, first, points, date, speed
+    global userName, energy, first, points, pointz, date, speed
     
     for i in enemyCarGroup:
         i.kill()
@@ -529,7 +515,8 @@ def resetGame():
     input_box1.update
     energy = 3
     points = 0
-    speed = 5
+    pointz = 0
+    speed = 4
    
     now = datetime.now()
     date = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -554,8 +541,6 @@ def menu():
     sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
 
     while menu_s:
-        
-        fnc()
         
         ##### RENDER #####
         
@@ -681,8 +666,7 @@ def scores():
 
     global scores_s
     while scores_s:
-        
-        fnc()
+
         
         ##### RENDER #####
         
@@ -756,7 +740,6 @@ def instructions():
     
     while instructions_s:
         
-        fnc()
         
         ##### RENDER #####
             
@@ -808,7 +791,6 @@ def enterName():
 
     while enterName_s:
         
-        fnc()
         ##### RENDER #####
         
         screen.blit(menuBg, (0, 0)) 
@@ -867,8 +849,6 @@ def mainLoop():
     playMusic("engine")
     
     while mainLoop_s:
-        
-        fnc()
         
         ##### clock
         count += 1
