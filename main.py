@@ -10,7 +10,9 @@ directory = os.path.dirname(os.path.realpath(__file__))
 ########## GLOBAL VARIABLES ########## 
 userName = str
 remaining_life = 3
+remaining_life2 = 3
 points = 0
+pointz = 0
 date = str
 speed = 5
 first = True
@@ -351,10 +353,23 @@ def heart_action():
     quando um coração é pego
     '''
     
-    global remaining_life
+    global remaining_life, remaining_life2
 
-    if remaining_life < 3:
+    if remaining_life < 5:
         remaining_life += 1
+
+    soundPoints.play()
+
+def heart_action2():
+    '''
+    quando um coração é pego pelo segundo jogador
+    '''
+    
+    global remaining_life, remaining_life2
+
+    if remaining_life2 < 5:
+        remaining_life2 += 1
+
     soundPoints.play()
     
 def display_info():
@@ -362,23 +377,56 @@ def display_info():
     mostra informações sobre nome do jogador, vidas restantes, pontuação e velocidade no canto superior direito da tela
     '''
     
-    global remaining_life, userName, points, speed
+    global remaining_life, userName, points, pointz, speed, playerKar
+    if playerKar.rect.x < 400:
+        points += 1
+        pointz += 10
+    else:
+        points += 1
 
-    points += 1
     if points % 1000 == 0:
         speed +=1
     
     nome = myfont.render("Nome: " + str(userName), 1, WHITE, BLACK)
-    screen.blit(nome, (610, 20))     
+    screen.blit(nome, (590, 20))     
     
     vida = myfont.render("Vidas: " + str(remaining_life), 1, WHITE, BLACK)
-    screen.blit(vida, (610, 50))
+    screen.blit(vida, (590, 50))
 
-    pontos = myfont.render("Pontuação: " + str(points), 1, WHITE, BLACK)
-    screen.blit(pontos, (610, 80))
+    pontos = myfont.render("Pontuação: " + str(points+pointz), 1, WHITE, BLACK)
+    screen.blit(pontos, (590, 80))
 
     velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
-    screen.blit(velocidade, (610, 110))
+    screen.blit(velocidade, (590, 110))
+
+def display_info_versus():
+    '''
+    mostra informações sobre os jogadores no modo versus do jogo
+    '''
+    
+    global remaining_life, remaining_life, points, speed
+
+    points += 1
+    if points % 400 == 1:
+        speed +=1
+    
+    nome = myfont.render("Jogador 2", 1, WHITE, BLACK)
+    screen.blit(nome, (610, 20))     
+    
+    vida = myfont.render("Vidas: " + str(remaining_life2), 1, WHITE, BLACK)
+    screen.blit(vida, (610, 50))
+
+    velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
+    screen.blit(velocidade, (610, 80))
+
+    nome = myfont.render("Jogador 1", 1, WHITE, BLACK)
+    screen.blit(nome, (10, 20))     
+    
+    vida = myfont.render("Vidas: " + str(remaining_life), 1, WHITE, BLACK)
+    screen.blit(vida, (10, 50))
+
+    velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
+    screen.blit(velocidade, (10, 80))
     
 
 cars_out = diamonds_out = 0 # variáveis criadas para controlar o numero de coisas que nascem
@@ -412,6 +460,32 @@ def launch():
         heart_group.add(heart)
         cars_out = 0
         diamonds_out = 0
+
+cars_out = diamonds_out = 0 # variáveis criadas para controlar o numero de coisas que nascem
+def launch_versus():
+    '''
+    launch car and things
+    '''
+    global cars_out, diamonds_out
+
+    lane_list = [200, 250, 300, 350, 400, 450, 500, 550]
+    lane = random.choice(lane_list)
+
+    # inverter a imagem do carro caso ele esteja na contra-mão
+    invert = False 
+    if lane < 400:
+        invert = True
+
+    if cars_out < 5:
+        enemy_car = enemyCar(lane, invert)
+        enemy_car_group.add(enemy_car)
+        cars_out += 1
+    
+    else: # um coração nasce a cada 5 diamantes
+        heart = thing(lane, "heart")
+        heart_group.add(heart)
+        cars_out = 0
+
         
 ##### Crash
 aux = False
@@ -436,7 +510,7 @@ def crash(value):
 ##### reset game
 
 def resetGame():
-    global userName, remaining_life, first, points, date, speed
+    global userName, remaining_life, remaining_life2, first, points, pointz, date, speed
     
     for i in enemy_car_group:
         i.kill()
@@ -453,7 +527,9 @@ def resetGame():
 
     input_box1.update
     remaining_life = 3
+    remaining_life2 = 3
     points = 0
+    pointz = 0
     speed = 5
    
     now = datetime.now()
@@ -468,7 +544,8 @@ def menu():
     
     global data, sortedData, menu_s, firts
 
-    playBtn = button(RED, 300, 270, 200, 25, "PLAY")
+    playBtn = button(RED, 300, 240, 200, 25, "PLAY")
+    playvsBtn = button(RED, 300, 270, 200, 25, "PLAY VERSUS")
     scoresBtn = button(RED, 300, 300, 200, 25, "SCORES")
     instBtn = button(RED, 300, 330, 200, 25, "INSTRUCTIONS")
     exitBtn = button(RED, 300, 360, 200, 25, "EXIT")
