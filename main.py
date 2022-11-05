@@ -107,6 +107,31 @@ playerKar = kar()
 kar_group = pygame.sprite.Group() 
 kar_group.add(playerKar)
 
+class kar2(pygame.sprite.Sprite):
+    
+    def __init__(self):
+        super().__init__()
+        
+        # picture = pygame.image.load(directory+"\\sprites\\—Pngtree—red sport car png_8280576.png")
+        # picture = pygame.transform.scale(picture, (65, 65))
+        # self.image = picture.convert_alpha()
+        self.image = pygame.image.load(directory + "\\sprites\\kar2.png").convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = 450
+        self.rect.y = 400
+        
+    def moveRight(self, pixels):
+        if self.rect.x < 550:
+            self.rect.x += pixels
+ 
+    def moveLeft(self, pixels):
+        if self.rect.x > 200:
+            self.rect.x -= pixels
+
+playerKar2 = kar2() 
+kar_group2 = pygame.sprite.Group() 
+kar_group2.add(playerKar2)
+
 class landscape(pygame.sprite.Sprite):
     
     global speed
@@ -221,7 +246,7 @@ input_box1 = InputBox(300, 300, 140, 32)
 def changescn(scn, text="", btnfnc=""):
     
     # ~ continuar haciendo lo mismo que abajo
-    global menu_s, enterName_s, mainLoop_s, instructions_s, msg_s, scores_s
+    global menu_s, enterName_s, mainLoop_s, versusLoop_s, instructions_s, msg_s, scores_s
     menu_s = enterName_s = mainLoop_s = instructions_s = msg_s = scores_s = False
     
     if scn == "menu":
@@ -235,6 +260,10 @@ def changescn(scn, text="", btnfnc=""):
     elif scn == "mainLoop":
         mainLoop_s = True
         mainLoop()
+    
+    elif scn == "versusLoop":
+        versusLoop_s = True
+        versusLoop()
         
     elif scn == "instructions":
         instructions_s = True
@@ -263,6 +292,16 @@ def msg(text,btnfnc):
         resetGame()
         first = True
         soundGameOver.play()
+    elif text == "O Jogador 2 é o Vencedor!":
+        playMusic("stop")
+        resetGame()
+        first = True
+        soundVictory_Versus.play()
+    elif text == "O Jogador 1 é o Vencedor!":
+        playMusic("stop")
+        resetGame()
+        first = True
+        soundVictory_Versus.play()
         
     while msg_s:
             
@@ -286,6 +325,10 @@ def msg(text,btnfnc):
                 
                 if msgOkBtn.isOver(pos):
                     if text == "Game Over!":
+                        playMusic("main")
+                    elif text == "O Jogador 2 é o Vencedor!":
+                        playMusic("main")
+                    elif text == "O Jogador 1 é o Vencedor!":
                         playMusic("main")
     
                     changescn(btnfnc)
@@ -353,7 +396,7 @@ def heart_action():
     quando um coração é pego
     '''
     
-    global remaining_life, remaining_life2
+    global remaining_life
 
     if remaining_life < 5:
         remaining_life += 1
@@ -365,7 +408,7 @@ def heart_action2():
     quando um coração é pego pelo segundo jogador
     '''
     
-    global remaining_life, remaining_life2
+    global remaining_life2
 
     if remaining_life2 < 5:
         remaining_life2 += 1
@@ -506,6 +549,48 @@ def crash(value):
     if remaining_life < 1:
         saveGame()
         changescn("msg", text="Game Over!", btnfnc="menu")
+
+aux = False
+def crash_versus(value):
+    
+    global aux
+    global remaining_life, remaining_life2
+    global versusLoop_s
+
+    if value == True and aux == False:
+        remaining_life -= 1
+        soundCrash.play()
+
+        aux = True
+        
+    if value == False and aux == True:
+        aux = False
+
+    if remaining_life < 1:
+        versusLoop_s = False
+        resetGame()
+        changescn("msg", text="O Jogador 2 é o Vencedor!", btnfnc="menu")
+
+aux = False
+def crash_versus2(value):
+    
+    global aux
+    global remaining_life, remaining_life2
+    global versusLoop_s
+
+    if value == True and aux == False:
+        remaining_life2 -= 1
+        soundCrash.play()
+
+        aux = True
+        
+    if value == False and aux == True:
+        aux = False
+
+    if remaining_life2 < 1:
+        versusLoop_s = False
+        resetGame()
+        changescn("msg", text="O Jogador 1 é o Vencedor!", btnfnc="menu")
         
 ##### reset game
 
@@ -560,6 +645,7 @@ def menu():
         ##### RENDER #####
         screen.blit(menu_background, (0, 0))
         playBtn.draw(screen, (0,0,0))
+        playvsBtn.draw(screen, (0,0,0))
         scoresBtn.draw(screen, (0,0,0))
         instBtn.draw(screen, (0,0,0))
         exitBtn.draw(screen, (0,0,0))
@@ -591,6 +677,9 @@ def menu():
                     
                 if backBtn.isOver(pos):
                     changescn("mainLoop")
+                
+                if playvsBtn.isOver(pos):         
+                    changescn("versusLoop")
                     
                 if scoresBtn.isOver(pos):
                     changescn("scores")
@@ -926,7 +1015,91 @@ def mainLoop():
         pygame.display.flip()
         clock.tick(60) # This method should be called once per frame // aprox 16 - 17 fps
         
+##### versus loop
+count_time = 0
+versusLoop_s = bool
+def versusLoop():
 
+    global versusLoop_s, first, count_time, size, speed
+    
+    playMusic("engine")
+    
+    while versusLoop_s:
+
+        # controlar launch de itens
+        count_time += 1
+        if count_time > 10:
+            count_time = 0
+            launch()
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                versusLoop_s = False
+ 
+        # resonder quando teclas forem pressionadas
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            playerKar.moveLeft(5)
+        if keys[pygame.K_d]:
+            playerKar.moveRight(5)
+        if keys[pygame.K_LEFT]:
+            playerKar2.moveLeft(5)
+        if keys[pygame.K_RIGHT]:
+            playerKar2.moveRight(5)
+        if keys[pygame.K_ESCAPE]:
+            resetGame()    
+            playMusic("main")
+            changescn("menu")
+
+
+        # rederizar telas
+        lands_group.draw(screen)
+        enemy_car_group.draw(screen)
+        kar_group.draw(screen)
+        kar_group2.draw(screen)         
+        heart_group.draw(screen)
+
+        # mostrar informações no canto superior direto da tela
+        display_info_versus()
+        
+
+        lands01.play()
+        lands02.play()
+        
+        # garantir que tudo se mova no mapa
+        for car in enemy_car_group:
+            car.moveForward()
+        for heart in heart_group:
+           heart.moveForward()
+
+        ##### COLISIONS #####
+        
+        # car and enemies
+        car_collision_list = pygame.sprite.spritecollide(playerKar, enemy_car_group,False,pygame.sprite.collide_mask)
+        car_collision_list2 = pygame.sprite.spritecollide(playerKar2, enemy_car_group,False,pygame.sprite.collide_mask)
+        
+        if car_collision_list:
+            crash_versus(True)
+        elif car_collision_list2:
+            crash_versus2(True)
+        else:
+            crash_versus(False)
+            crash_versus2(False)
+
+        # car and heart
+        heart_collision = pygame.sprite.spritecollide(playerKar ,heart_group,True,pygame.sprite.collide_mask)
+        heart_collision2 = pygame.sprite.spritecollide(playerKar2 ,heart_group,True,pygame.sprite.collide_mask)
+
+        if heart_collision:
+            heart_action()
+        elif heart_collision2:
+            heart_action2()
+
+        #Refresh Screen
+        
+        pygame.display.flip()
+        clock.tick(60)
 
 #################################################################
 
