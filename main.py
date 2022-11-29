@@ -16,6 +16,10 @@ pointz = 0
 date = str
 speed = 5
 first = True
+lands01 = 0
+lands02 = 0
+lands_group = 0
+Background_level = "levelBackground"
 
 
 ########## CLASSES, INSTANCES, GROUPS ########## 
@@ -134,11 +138,12 @@ kar_group2.add(playerKar2)
 
 class landscape(pygame.sprite.Sprite):
     
-    global speed
+    global speed, Background_level, lands01, lands02, lands_group
     
     def __init__(self, y):
         super().__init__()
-        self.image = pygame.image.load(directory + "\\sprites\\levelBackground.png").convert_alpha()
+        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground.png").convert_alpha()
+        print(Background_level)
         self.rect = self.image.get_rect() 
         self.rect.y = y
         
@@ -147,13 +152,55 @@ class landscape(pygame.sprite.Sprite):
             self.rect.y += speed
         else:
             self.rect.y = -500
-            
-lands01 = landscape(-500) 
-lands02 = landscape(0) 
-lands_group = pygame.sprite.Group() 
-lands_group.add(lands01) 
-lands_group.add(lands02)
 
+class landscape2(pygame.sprite.Sprite):
+    
+    global speed, Background_level
+    
+    def __init__(self, y):
+        super().__init__()
+        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground1.png").convert_alpha()
+        print(Background_level)
+        self.rect = self.image.get_rect() 
+        self.rect.y = y
+        
+    def play(self):
+        if self.rect.y < 500:
+            self.rect.y += speed
+        else:
+            self.rect.y = -500
+
+class landscape3(pygame.sprite.Sprite):
+    
+    global speed, Background_level
+    
+    def __init__(self, y):
+        super().__init__()
+        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground2.png").convert_alpha()
+        self.rect = self.image.get_rect() 
+        self.rect.y = y
+        
+    def play(self):
+        if self.rect.y < 500:
+            self.rect.y += speed
+        else:
+            self.rect.y = -500
+
+class landscape4(pygame.sprite.Sprite):
+    
+    global speed, Background_level
+    
+    def __init__(self, y):
+        super().__init__()
+        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground4.png").convert_alpha()
+        self.rect = self.image.get_rect() 
+        self.rect.y = y
+        
+    def play(self):
+        if self.rect.y < 500:
+            self.rect.y += speed
+        else:
+            self.rect.y = -500
 class button():
 
     def __init__(self, color, x,y,width,height, text=''):
@@ -246,8 +293,8 @@ input_box1 = InputBox(300, 300, 140, 32)
 def changescn(scn, text="", btnfnc=""):
     
     # ~ continuar haciendo lo mismo que abajo
-    global menu_s, enterName_s, mainLoop_s, versusLoop_s, instructions_s, msg_s, scores_s
-    menu_s = enterName_s = mainLoop_s = instructions_s = msg_s = scores_s = False
+    global menu_s, enterName_s, mainLoop_s, versusLoop_s, instructions_s, msg_s, scores_s, mapmenu_s
+    menu_s = enterName_s = mainLoop_s = instructions_s = msg_s = scores_s = mapmenu_s = False
     
     if scn == "menu":
         menu_s = True
@@ -268,6 +315,10 @@ def changescn(scn, text="", btnfnc=""):
     elif scn == "instructions":
         instructions_s = True
         instructions()
+    
+    elif scn == "mapmenu":
+        mapmenu_s = True
+        mapmenu()
         
     elif scn == "msg":
         msg_s = True
@@ -692,6 +743,96 @@ def menu():
 
         # Refresh Screen
         pygame.display.flip()
+
+mapmenu_s = bool
+def mapmenu():
+    
+    global data, sortedData, menu_s, firts, Background_level, speed, lands01, lands02, lands_group, screen
+
+    CopacabanaBtn = button(RED, 300, 240, 400, 25, "COPACABANA")
+    IpanemaBtn = button(RED, 300, 270, 400, 25, "IPANEMA")
+    AvNacoesBtn = button(RED, 300, 300, 400, 25, "AVENIDA DAS NAÇÕES UNIDAS")
+    AvriobrancoBtn = button(RED, 300, 330, 400, 25, "AVENIDA RIO BRANCO")
+    backBtn = button(RED, 550, 450, 200, 25, "Back")
+
+    with open(directory + "\\save\\" + "scores.txt", "r") as f:
+        data = json.load(f)
+    sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
+
+    while mapmenu_s:
+
+        ##### RENDER #####
+        screen.blit(menu_background, (0, 0))
+        CopacabanaBtn.draw(screen, (0,0,0))
+        IpanemaBtn.draw(screen, (0,0,0))
+        AvNacoesBtn.draw(screen, (0,0,0))
+        AvriobrancoBtn.draw(screen, (0,0,0))
+        backBtn.draw(screen, (0,0,0))
+
+        if first == False:
+        
+            backBtn.draw(screen, (0,0,0))
+
+        ##### EVENTOS #####
+        
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+ 
+            if event.type == pygame.QUIT:
+                menu_s = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                ############ control de los botones
+                
+                if CopacabanaBtn.isOver(pos):
+                    landscape(0)
+                    lands01 = landscape(-500) 
+                    lands02 = landscape(0) 
+                    lands_group = pygame.sprite.Group()
+                    lands_group.add(lands01) 
+                    lands_group.add(lands02)
+                    changescn("mainLoop")
+                    
+      
+                if IpanemaBtn.isOver(pos):
+                    landscape2(0)
+                    lands01 = landscape2(-500) 
+                    lands02 = landscape2(0) 
+                    lands_group = pygame.sprite.Group()
+                    lands_group.add(lands01) 
+                    lands_group.add(lands02)
+                    changescn("mainLoop")
+                
+                if backBtn.isOver(pos):
+                    resetGame()
+                    changescn("menu")
+                
+                if AvNacoesBtn.isOver(pos):         
+                    landscape3(0)
+                    lands01 = landscape3(-500) 
+                    lands02 = landscape3(0) 
+                    lands_group = pygame.sprite.Group()
+                    lands_group.add(lands01) 
+                    lands_group.add(lands02)
+                    changescn("mainLoop")
+                    
+                if AvriobrancoBtn.isOver(pos):
+                    landscape4(0)
+                    lands01 = landscape4(-500) 
+                    lands02 = landscape4(0) 
+                    lands_group = pygame.sprite.Group()
+                    lands_group.add(lands01) 
+                    lands_group.add(lands02)
+                    changescn("mainLoop")
+                    changescn("mainLoop")
+                    
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_ESCAPE: 
+                    menu_s = False               
+
+        # Refresh Screen
+        pygame.display.flip()
        
 ##### scores
    
@@ -917,7 +1058,7 @@ def enterName():
                     else:
                         first = False
                         resetGame()
-                        changescn("mainLoop")
+                        changescn("mapmenu")
          
                 if enterBackBtn.isOver(pos):
                     changescn("menu")

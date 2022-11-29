@@ -1,1 +1,1 @@
-{}
+{"28/11/2022 20:20:16": {"name": "mikael", "points": 1866, "remaining_life": 0}, "28/11/2022 20:20:41": {"name": "awewsct", "points": 3114, "remaining_life": 0}, "28/11/2022 22:45:55": {"name": "miak", "points": 2767, "remaining_life": 0}, "28/11/2022 22:46:06": {"name": "mikael", "points": 9103, "remaining_life": 0}, "28/11/2022 22:46:24": {"name": "mikael", "points": 13798, "remaining_life": 0}, "28/11/2022 22:46:59": {"name": "mikael", "points": 6623, "remaining_life": 0}, "28/11/2022 22:47:20": {"name": "mikael", "points": 1439, "remaining_life": 0}}
