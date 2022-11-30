@@ -56,7 +56,7 @@ class enemyCar(pygame.sprite.Sprite):
             self.rect.y += speed
         else:
             self.kill()
-        if self.rect.x < 400:
+        if self.rect.x < 500:
             self.rect.y += round(speed/2)
 
 enemy_car_group = pygame.sprite.Group()
@@ -100,11 +100,11 @@ class kar(pygame.sprite.Sprite):
         self.rect.y = 400
         
     def moveRight(self, pixels):
-        if self.rect.x < 550:
+        if self.rect.x < 650:
             self.rect.x += pixels
  
     def moveLeft(self, pixels):
-        if self.rect.x > 200:
+        if self.rect.x > 300:
             self.rect.x -= pixels
 
 playerKar = kar() 
@@ -125,11 +125,11 @@ class kar2(pygame.sprite.Sprite):
         self.rect.y = 400
         
     def moveRight(self, pixels):
-        if self.rect.x < 550:
+        if self.rect.x < 650:
             self.rect.x += pixels
  
     def moveLeft(self, pixels):
-        if self.rect.x > 200:
+        if self.rect.x > 300:
             self.rect.x -= pixels
 
 playerKar2 = kar2() 
@@ -143,15 +143,14 @@ class landscape(pygame.sprite.Sprite):
     def __init__(self, y):
         super().__init__()
         self.image = pygame.image.load(directory + f"\\sprites\\levelBackground.png").convert_alpha()
-        print(Background_level)
         self.rect = self.image.get_rect() 
         self.rect.y = y
         
     def play(self):
-        if self.rect.y < 500:
+        if self.rect.y < 5000:
             self.rect.y += speed
         else:
-            self.rect.y = -500
+            self.rect.y = -5000
 
 class landscape2(pygame.sprite.Sprite):
     
@@ -160,15 +159,14 @@ class landscape2(pygame.sprite.Sprite):
     def __init__(self, y):
         super().__init__()
         self.image = pygame.image.load(directory + f"\\sprites\\levelBackground1.png").convert_alpha()
-        print(Background_level)
         self.rect = self.image.get_rect() 
         self.rect.y = y
         
     def play(self):
-        if self.rect.y < 500:
+        if self.rect.y < 2500:
             self.rect.y += speed
         else:
-            self.rect.y = -500
+            self.rect.y = -2500
 
 class landscape3(pygame.sprite.Sprite):
     
@@ -192,15 +190,15 @@ class landscape4(pygame.sprite.Sprite):
     
     def __init__(self, y):
         super().__init__()
-        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground4.png").convert_alpha()
+        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground3.png").convert_alpha()
         self.rect = self.image.get_rect() 
         self.rect.y = y
         
     def play(self):
-        if self.rect.y < 500:
+        if self.rect.y < 2500:
             self.rect.y += speed
         else:
-            self.rect.y = -500
+            self.rect.y = -2500
 class button():
 
     def __init__(self, color, x,y,width,height, text=''):
@@ -472,9 +470,9 @@ def display_info():
     '''
     
     global remaining_life, userName, points, pointz, speed, playerKar
-    if playerKar.rect.x < 400:
+    if playerKar.rect.x < 500:
         points += 1
-        pointz += 10
+        pointz += 2
     else:
         points += 1
 
@@ -530,12 +528,12 @@ def launch():
     '''
     global cars_out, diamonds_out
 
-    lane_list = [200, 250, 300, 350, 400, 450, 500, 550]
+    lane_list = [300, 350, 400, 450, 500, 550, 600, 650]
     lane = random.choice(lane_list)
 
     # inverter a imagem do carro caso ele esteja na contra-mão
     invert = False 
-    if lane < 400:
+    if lane < 500:
         invert = True
 
     if cars_out < 5:
@@ -562,12 +560,12 @@ def launch_versus():
     '''
     global cars_out, diamonds_out
 
-    lane_list = [200, 250, 300, 350, 400, 450, 500, 550]
+    lane_list = [300, 350, 400, 450, 500, 550, 600, 650]
     lane = random.choice(lane_list)
 
     # inverter a imagem do carro caso ele esteja na contra-mão
     invert = False 
-    if lane < 400:
+    if lane < 500:
         invert = True
 
     if cars_out < 5:
@@ -787,7 +785,7 @@ def mapmenu():
                 
                 if CopacabanaBtn.isOver(pos):
                     landscape(0)
-                    lands01 = landscape(-500) 
+                    lands01 = landscape(-5000) 
                     lands02 = landscape(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
@@ -797,7 +795,7 @@ def mapmenu():
       
                 if IpanemaBtn.isOver(pos):
                     landscape2(0)
-                    lands01 = landscape2(-500) 
+                    lands01 = landscape2(-2500) 
                     lands02 = landscape2(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
@@ -819,7 +817,7 @@ def mapmenu():
                     
                 if AvriobrancoBtn.isOver(pos):
                     landscape4(0)
-                    lands01 = landscape4(-500) 
+                    lands01 = landscape4(-2500) 
                     lands02 = landscape4(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
@@ -1020,7 +1018,7 @@ def instructions():
 enterName_s = False
 def enterName():
 
-    global enterName_s, user_text, first
+    global enterName_s, user_text, first, remaining_life, speed
     
     enterOkBtn = button(RED, 300, 350, 200, 25, "OK")
     enterBackBtn = button(RED, 550, 450, 200, 25, "Back")
@@ -1054,6 +1052,24 @@ def enterName():
                     
                     if input_box1.text == "":
                         changescn("msg", text="You have to enter name", btnfnc="enterName")
+                    
+                    elif input_box1.text == "INVINCIBLE":
+                        first = False
+                        resetGame()
+                        remaining_life += 97
+                        changescn("mapmenu")
+                    
+                    elif input_box1.text == "I AM SPEED":
+                        first = False
+                        resetGame()
+                        speed += 10
+                        changescn("mapmenu")
+
+                    elif input_box1.text == "ROCKETMAN":
+                        first = False
+                        resetGame()
+                        speed += 995
+                        changescn("mapmenu") 
                             
                     else:
                         first = False

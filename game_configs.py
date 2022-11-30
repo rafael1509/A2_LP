@@ -14,9 +14,9 @@ soundVictory_Versus = pygame.mixer.Sound(directory + "\\sounds\\victory_versus.m
 soundGameOver = pygame.mixer.Sound(directory + "\\sounds\\gameOver.wav")
 
 # Configurando a janela
-SCREENWIDTH=800
-SCREENHEIGHT=500
-size = (800, 500)
+SCREENWIDTH=1000
+SCREENHEIGHT=625
+size = (1000, 625)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Driver")
 os.environ['SDL_VIDEO_CENTERED'] = '1'
