@@ -163,10 +163,10 @@ class landscape2(pygame.sprite.Sprite):
         self.rect.y = y
         
     def play(self):
-        if self.rect.y < 2500:
+        if self.rect.y < 5000:
             self.rect.y += speed
         else:
-            self.rect.y = -2500
+            self.rect.y = -5000
 
 class landscape3(pygame.sprite.Sprite):
     
@@ -795,7 +795,7 @@ def mapmenu():
       
                 if IpanemaBtn.isOver(pos):
                     landscape2(0)
-                    lands01 = landscape2(-2500) 
+                    lands01 = landscape2(-5000) 
                     lands02 = landscape2(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
