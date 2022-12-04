@@ -158,7 +158,7 @@ class landscape2(pygame.sprite.Sprite):
     
     def __init__(self, y):
         super().__init__()
-        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground1.png").convert_alpha()
+        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground2.png").convert_alpha()
         self.rect = self.image.get_rect() 
         self.rect.y = y
         
@@ -169,22 +169,6 @@ class landscape2(pygame.sprite.Sprite):
             self.rect.y = -5000
 
 class landscape3(pygame.sprite.Sprite):
-    
-    global speed, Background_level
-    
-    def __init__(self, y):
-        super().__init__()
-        self.image = pygame.image.load(directory + f"\\sprites\\levelBackground2.png").convert_alpha()
-        self.rect = self.image.get_rect() 
-        self.rect.y = y
-        
-    def play(self):
-        if self.rect.y < 500:
-            self.rect.y += speed
-        else:
-            self.rect.y = -500
-
-class landscape4(pygame.sprite.Sprite):
     
     global speed, Background_level
     
@@ -282,7 +266,7 @@ class InputBox:
         # Blit the rect.
         pygame.draw.rect(screen, self.color, self.rect, 2) 
     
-input_box1 = InputBox(300, 300, 140, 32)  
+input_box1 = InputBox(400, 300, 140, 32)  
 
 ##### FUNCTIONS #####
 
@@ -678,12 +662,12 @@ def menu():
     
     global data, sortedData, menu_s, firts
 
-    playBtn = button(RED, 300, 240, 200, 25, "PLAY")
-    playvsBtn = button(RED, 300, 270, 200, 25, "PLAY VERSUS")
-    scoresBtn = button(RED, 300, 300, 200, 25, "SCORES")
-    instBtn = button(RED, 300, 330, 200, 25, "INSTRUCTIONS")
-    exitBtn = button(RED, 300, 360, 200, 25, "EXIT")
-    backBtn = button(RED, 550, 450, 200, 25, "Back")
+    playBtn = button(RED, 400, 240, 200, 25, "PLAY")
+    playvsBtn = button(RED, 400, 270, 200, 25, "PLAY VERSUS")
+    scoresBtn = button(RED, 400, 300, 200, 25, "SCORES")
+    instBtn = button(RED, 400, 330, 200, 25, "INSTRUCTIONS")
+    exitBtn = button(RED, 400, 360, 200, 25, "EXIT")
+    backBtn = button(RED, 650, 450, 200, 25, "Back")
 
     with open(directory + "\\save\\" + "scores.txt", "r") as f:
         data = json.load(f)
@@ -747,11 +731,10 @@ def mapmenu():
     
     global data, sortedData, menu_s, firts, Background_level, speed, lands01, lands02, lands_group, screen
 
-    CopacabanaBtn = button(RED, 300, 240, 400, 25, "COPACABANA")
-    IpanemaBtn = button(RED, 300, 270, 400, 25, "IPANEMA")
-    AvNacoesBtn = button(RED, 300, 300, 400, 25, "AVENIDA DAS NAÇÕES UNIDAS")
+    CopacabanaBtn = button(RED, 300, 270, 400, 25, "COPACABANA")
+    IpanemaBtn = button(RED, 300, 300, 400, 25, "IPANEMA")
     AvriobrancoBtn = button(RED, 300, 330, 400, 25, "AVENIDA RIO BRANCO")
-    backBtn = button(RED, 550, 450, 200, 25, "Back")
+    backBtn = button(RED, 650, 450, 200, 25, "Back")
 
     with open(directory + "\\save\\" + "scores.txt", "r") as f:
         data = json.load(f)
@@ -763,7 +746,6 @@ def mapmenu():
         screen.blit(menu_background, (0, 0))
         CopacabanaBtn.draw(screen, (0,0,0))
         IpanemaBtn.draw(screen, (0,0,0))
-        AvNacoesBtn.draw(screen, (0,0,0))
         AvriobrancoBtn.draw(screen, (0,0,0))
         backBtn.draw(screen, (0,0,0))
 
@@ -805,20 +787,11 @@ def mapmenu():
                 if backBtn.isOver(pos):
                     resetGame()
                     changescn("menu")
-                
-                if AvNacoesBtn.isOver(pos):         
-                    landscape3(0)
-                    lands01 = landscape3(-500) 
-                    lands02 = landscape3(0) 
-                    lands_group = pygame.sprite.Group()
-                    lands_group.add(lands01) 
-                    lands_group.add(lands02)
-                    changescn("mainLoop")
                     
                 if AvriobrancoBtn.isOver(pos):
-                    landscape4(0)
-                    lands01 = landscape4(-2500) 
-                    lands02 = landscape4(0) 
+                    landscape3(0)
+                    lands01 = landscape3(-2500) 
+                    lands02 = landscape3(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
                     lands_group.add(lands02)
@@ -1020,8 +993,8 @@ def enterName():
 
     global enterName_s, user_text, first, remaining_life, speed
     
-    enterOkBtn = button(RED, 300, 350, 200, 25, "OK")
-    enterBackBtn = button(RED, 550, 450, 200, 25, "Back")
+    enterOkBtn = button(RED, 400, 350, 200, 25, "OK")
+    enterBackBtn = button(RED, 650, 450, 200, 25, "Back")
 
     labelEnterName = myfont.render("Enter user name:", 1, BLACK)
 
@@ -1033,7 +1006,7 @@ def enterName():
         enterOkBtn.draw(screen, (0,0,0)) 
         enterBackBtn.draw(screen, (0,0,0))
 
-        screen.blit(labelEnterName, (300, 270))  
+        screen.blit(labelEnterName, (400, 270))  
         
         input_box1.update()
         input_box1.draw(screen) 
