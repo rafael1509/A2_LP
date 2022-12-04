@@ -10,7 +10,7 @@ directory = os.path.dirname(os.path.realpath(__file__))
 # Configurando sons
 soundCrash = pygame.mixer.Sound(directory + "\\sounds\\crash.wav")
 soundPoints = pygame.mixer.Sound(directory + "\\sounds\\diamond.wav")
-soundVictory_Versus = pygame.mixer.Sound(directory + "\\sounds\\victory_versus.mp3")
+soundVictory_Versus = pygame.mixer.Sound(directory + "\\sounds\\victory_versus.wav")
 soundGameOver = pygame.mixer.Sound(directory + "\\sounds\\gameOver.wav")
 
 # Configurando a janela
