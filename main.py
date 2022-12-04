@@ -169,7 +169,9 @@ class landscape(pygame.sprite.Sprite):
             self.rect.y = -5000
 
 class landscape2(pygame.sprite.Sprite):
-    
+    '''
+    Essa classe é responsável pela paisagem de Ipanema, renderizando e movendo a imagem 
+    '''    
     global speed, Background_level
     
     def __init__(self, y):
@@ -185,7 +187,9 @@ class landscape2(pygame.sprite.Sprite):
             self.rect.y = -5000
 
 class landscape3(pygame.sprite.Sprite):
-    
+    '''
+    Essa classe é responsável pela paisagem da Avenida Rio Branco, renderizando e movendo a imagem 
+    '''   
     global speed, Background_level
     
     def __init__(self, y):
@@ -200,8 +204,24 @@ class landscape3(pygame.sprite.Sprite):
         else:
             self.rect.y = -2500
 class button():
-
-    def __init__(self, color, x,y,width,height, text=''):
+    '''
+    Essa classe é responsável pelos botões. Clicar e executar as ações conforme o necessário.
+    '''
+    def __init__(self, color, x, y, width, height, text=''):
+        '''
+        :param color: cor do botão. As cores estão definidas no módulo game_configs.py.
+        :type color: str
+        :param x: posição no eixo x
+        :type x: int
+        :param y: posição no eixo y
+        :type y: int
+        :param width: largura do botão
+        :type width: int
+        :param height: altura do botão
+        :type height: int
+        :param text: string indicando qual o tipo do botão: "ok", "play", "play versus", "instructions", "exit, "back", "clear scores", "copacabana", "ipanema", "rio branco"
+        :type text: str
+        '''
         self.color = color
         self.x = x
         self.y = y
@@ -209,7 +229,11 @@ class button():
         self.height = height
         self.text = text
 
-    def draw(self,win,outline=None):
+    def draw_button(self,win,outline=None):
+        '''
+        :param win: definir a posição do botão
+        :type win: tuple
+        '''
         if outline:
             pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
             
@@ -276,7 +300,7 @@ class InputBox:
         width = max(200, self.txt_surface.get_width()+10)
         self.rect.w = width
 
-    def draw(self, screen):
+    def draw_input(self, screen):
         # Blit the text.
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         # Blit the rect.
@@ -356,7 +380,7 @@ def msg(text,btnfnc):
             
         screen.fill(MAGENTA)
         screen.blit(label, (SCREENWIDTH/2 - label.get_width()/2, SCREENHEIGHT/2 - label.get_height()/2 - 50))
-        msgOkBtn.draw(screen, BLACK)
+        msgOkBtn.draw_button(screen, BLACK)
         
         ##### UPDATE #####
         
@@ -696,15 +720,15 @@ def menu():
 
         ##### RENDER #####
         screen.blit(menu_background, (0, 0))
-        playBtn.draw(screen, (0,0,0))
-        playvsBtn.draw(screen, (0,0,0))
-        scoresBtn.draw(screen, (0,0,0))
-        instBtn.draw(screen, (0,0,0))
-        exitBtn.draw(screen, (0,0,0))
+        playBtn.draw_button(screen, (0,0,0))
+        playvsBtn.draw_button(screen, (0,0,0))
+        scoresBtn.draw_button(screen, (0,0,0))
+        instBtn.draw_button(screen, (0,0,0))
+        exitBtn.draw_button(screen, (0,0,0))
 
         if first == False:
         
-            backBtn.draw(screen, (0,0,0))
+            backBtn.draw_button(screen, (0,0,0))
 
         ##### EVENTOS #####
         
@@ -763,14 +787,14 @@ def mapmenu():
 
         ##### RENDER #####
         screen.blit(menu_background, (0, 0))
-        CopacabanaBtn.draw(screen, (0,0,0))
-        IpanemaBtn.draw(screen, (0,0,0))
-        AvriobrancoBtn.draw(screen, (0,0,0))
-        backBtn.draw(screen, (0,0,0))
+        CopacabanaBtn.draw_button(screen, (0,0,0))
+        IpanemaBtn.draw_button(screen, (0,0,0))
+        AvriobrancoBtn.draw_button(screen, (0,0,0))
+        backBtn.draw_button(screen, (0,0,0))
 
         if first == False:
         
-            backBtn.draw(screen, (0,0,0))
+            backBtn.draw_button(screen, (0,0,0))
 
         ##### EVENTOS #####
         
@@ -919,8 +943,8 @@ def scores():
         screen.blit(score8, (100, 360))
         screen.blit(score9, (100, 390))
         
-        scoresOk.draw(screen, (0,0,0))
-        scoresClear.draw(screen, (0,0,0))
+        scoresOk.draw_button(screen, (0,0,0))
+        scoresClear.draw_button(screen, (0,0,0))
 
         ##### EVENTS #####
         
@@ -982,7 +1006,7 @@ def instructions():
         screen.blit(label3, (100, 250))
 
   
-        backBtn.draw(screen, (0,0,0))
+        backBtn.draw_button(screen, (0,0,0))
         
         ##### ACTUALIZACION #####
         
@@ -1022,13 +1046,13 @@ def enterName():
         ##### RENDER #####
         
         screen.blit(menu_background, (0, 0)) 
-        enterOkBtn.draw(screen, (0,0,0)) 
-        enterBackBtn.draw(screen, (0,0,0))
+        enterOkBtn.draw_button(screen, (0,0,0)) 
+        enterBackBtn.draw_button(screen, (0,0,0))
 
         screen.blit(labelEnterName, (400, 270))  
         
         input_box1.update()
-        input_box1.draw(screen) 
+        input_box1.draw_input(screen) 
 
         ##### EVENTOS #####
         
