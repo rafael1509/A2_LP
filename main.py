@@ -7,8 +7,8 @@ clock=pygame.time.Clock()
 directory = os.path.dirname(os.path.realpath(__file__))
 
 
-########## GLOBAL VARIABLES ########## 
-userName = str
+## Variáveis globais
+user_name = str
 remaining_life = 3
 remaining_life2 = 3
 points = 0
@@ -24,19 +24,25 @@ Background_level = "levelBackground"
 
 ########## CLASSES, INSTANCES, GROUPS ########## 
 
-class enemyCar(pygame.sprite.Sprite):
-
+class car(pygame.sprite.Sprite):
+    '''
+    Essa classe é responsável pelos carros que atuam como obstáculos para o jogador
+    '''
     def __init__(self, lane, invert):
+        '''
+        :param lane: posição em que o carro vai nascer
+        :type lane: int
+        :param invert: booleano para girar 180º o carro caso ele nasça na contra-mão
+        :type invert: bool
+        '''
         super().__init__()
 
         global speed
         
         self.size = (50, 50)
-
         self.image = pygame.transform.rotate(pygame.transform.scale(pygame.image.load(directory + "\\sprites\\gray_car.png").convert_alpha(),self.size),180)
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
-
         self.lane = lane
 
         car_kind = ['gray_car', 'red_truck', 'green_truck', 'gray_truck', 'brown_truck', 'yellow_bus']
@@ -50,7 +56,7 @@ class enemyCar(pygame.sprite.Sprite):
         self.rect.x = self.lane
         self.rect.y = -100
         
-    def moveForward(self):
+    def move_forward(self):
         
         if self.rect.y < 650:
             self.rect.y += speed
@@ -61,22 +67,27 @@ class enemyCar(pygame.sprite.Sprite):
 
 enemy_car_group = pygame.sprite.Group()
 
-class thing(pygame.sprite.Sprite):
 
+class thing(pygame.sprite.Sprite):
+    '''
+    
+    '''
     def __init__(self, lane, type):
         super().__init__()
+
         if type == 'diamond':
             self.image = pygame.image.load(directory + "\\sprites\\diamond.png").convert_alpha()
+
         else: #heart
             picture = pygame.image.load(directory + "\\sprites\\heart.png")
-            picture = pygame.transform.scale(picture, (50, 50))
+            picture = pygame.transform.scale(picture, (45, 45))
             self.image = picture.convert_alpha() 
 
         self.rect = self.image.get_rect()
         self.rect.y = -100
         self.rect.x = lane
 
-    def moveForward(self):
+    def move_forward(self):
         
         if self.rect.y < 650:
             self.rect.y += speed
@@ -86,7 +97,7 @@ class thing(pygame.sprite.Sprite):
 diamond_group = pygame.sprite.Group()
 heart_group = pygame.sprite.Group()
             
-class kar(pygame.sprite.Sprite):
+class player_car(pygame.sprite.Sprite):
     
     def __init__(self):
         super().__init__()
@@ -107,9 +118,9 @@ class kar(pygame.sprite.Sprite):
         if self.rect.x > 300:
             self.rect.x -= pixels
 
-playerKar = kar() 
-kar_group = pygame.sprite.Group() 
-kar_group.add(playerKar)
+player_kar = player_car() 
+player_car_group = pygame.sprite.Group() 
+player_car_group.add(player_kar)
 
 class kar2(pygame.sprite.Sprite):
     
@@ -132,9 +143,9 @@ class kar2(pygame.sprite.Sprite):
         if self.rect.x > 300:
             self.rect.x -= pixels
 
-playerKar2 = kar2() 
-kar_group2 = pygame.sprite.Group() 
-kar_group2.add(playerKar2)
+player_kar2 = kar2() 
+player_car_group2 = pygame.sprite.Group() 
+player_car_group2.add(player_kar2)
 
 class landscape(pygame.sprite.Sprite):
     
@@ -380,7 +391,6 @@ def playMusic(music):
         
     elif music == "engine":
         pygame.mixer.music.load(directory + "\\sounds\\engine.wav")
-        #pygame.mixer.music.set_volume(0.05)
         pygame.mixer.music.play(-1)
         
     elif music == "stop":
@@ -392,13 +402,13 @@ sortedData = []
 data = {}
 def saveGame():
     
-    global sortedData, data, date, points, userName
+    global sortedData, data, date, points, user_name
     
     with open(directory + "\\save\\" + "scores.txt", "r") as f:
         data = json.load(f)
 
     # add key to dictthings
-    data.update({date:{"name":userName, "points":points, "remaining_life":remaining_life}} )
+    data.update({date:{"name":user_name, "points":points, "remaining_life":remaining_life}} )
     
     # order and clear dict
     sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
@@ -453,8 +463,8 @@ def display_info():
     mostra informações sobre nome do jogador, vidas restantes, pontuação e velocidade no canto superior direito da tela
     '''
     
-    global remaining_life, userName, points, pointz, speed, playerKar
-    if playerKar.rect.x < 500:
+    global remaining_life, user_name, points, pointz, speed, player_kar
+    if player_kar.rect.x < 500:
         points += 1
         pointz += 2
     else:
@@ -463,7 +473,7 @@ def display_info():
     if points % 1000 == 0:
         speed +=1
     
-    nome = myfont.render("Nome: " + str(userName), 1, WHITE, BLACK)
+    nome = myfont.render("Nome: " + str(user_name), 1, WHITE, BLACK)
     screen.blit(nome, (590, 20))     
     
     vida = myfont.render("Vidas: " + str(remaining_life), 1, WHITE, BLACK)
@@ -521,7 +531,7 @@ def launch():
         invert = True
 
     if cars_out < 5:
-        enemy_car = enemyCar(lane, invert)
+        enemy_car = car(lane, invert)
         enemy_car_group.add(enemy_car)
         cars_out += 1
         
@@ -553,7 +563,7 @@ def launch_versus():
         invert = True
 
     if cars_out < 5:
-        enemy_car = enemyCar(lane, invert)
+        enemy_car = car(lane, invert)
         enemy_car_group.add(enemy_car)
         cars_out += 1
     
@@ -628,7 +638,7 @@ def crash_versus2(value):
 ##### reset game
 
 def resetGame():
-    global userName, remaining_life, remaining_life2, first, points, pointz, date, speed
+    global user_name, remaining_life, remaining_life2, first, points, pointz, date, speed
     
     for i in enemy_car_group:
         i.kill()
@@ -639,7 +649,7 @@ def resetGame():
     for i in heart_group:
         i.kill()
     
-    userName = input_box1.text
+    user_name = input_box1.text
     input_box1.text = "" # clear input_box
     input_box1.txt_surface = myfont.render("", True, input_box1.color) # clear input_box 
 
@@ -671,7 +681,7 @@ def menu():
 
     with open(directory + "\\save\\" + "scores.txt", "r") as f:
         data = json.load(f)
-    sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
+    sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar dicionario de dicionarios
 
     while menu_s:
 
@@ -1089,9 +1099,9 @@ def mainLoop():
         # resonder quando teclas forem pressionadas
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
-            playerKar.moveLeft(5)
+            player_kar.moveLeft(5)
         if keys[pygame.K_d]:
-            playerKar.moveRight(5)         
+            player_kar.moveRight(5)         
         if keys[pygame.K_ESCAPE]:
             saveGame()
             playMusic("main")
@@ -1100,7 +1110,7 @@ def mainLoop():
         # rederizar telas
         lands_group.draw(screen)
         enemy_car_group.draw(screen)
-        kar_group.draw(screen)        
+        player_car_group.draw(screen)        
         diamond_group.draw(screen)
         heart_group.draw(screen)
 
@@ -1113,16 +1123,16 @@ def mainLoop():
         
         # garantir que tudo se mova no mapa
         for car in enemy_car_group:
-            car.moveForward()
+            car.move_forward()
         for diamond in diamond_group:
-           diamond.moveForward()
+           diamond.move_forward()
         for heart in heart_group:
-           heart.moveForward()
+           heart.move_forward()
 
         ##### COLISIONS #####
         
         # car and enemies
-        car_collision_list = pygame.sprite.spritecollide(playerKar, enemy_car_group,False,pygame.sprite.collide_mask)
+        car_collision_list = pygame.sprite.spritecollide(player_kar, enemy_car_group,False,pygame.sprite.collide_mask)
         
         if car_collision_list:
             crash(True)
@@ -1130,13 +1140,13 @@ def mainLoop():
             crash(False)
 
         # car and diamond
-        diamond_collision = pygame.sprite.spritecollide(playerKar, diamond_group,True,pygame.sprite.collide_mask)
+        diamond_collision = pygame.sprite.spritecollide(player_kar, diamond_group,True,pygame.sprite.collide_mask)
         
         if diamond_collision:
             diamond_action()
 
         # car and heart
-        heart_collision = pygame.sprite.spritecollide(playerKar ,heart_group,True,pygame.sprite.collide_mask)
+        heart_collision = pygame.sprite.spritecollide(player_kar ,heart_group,True,pygame.sprite.collide_mask)
         if heart_collision:
             heart_action()
 
@@ -1170,13 +1180,13 @@ def versusLoop():
         # resonder quando teclas forem pressionadas
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
-            playerKar.moveLeft(5)
+            player_kar.moveLeft(5)
         if keys[pygame.K_d]:
-            playerKar.moveRight(5)
+            player_kar.moveRight(5)
         if keys[pygame.K_LEFT]:
-            playerKar2.moveLeft(5)
+            player_kar2.moveLeft(5)
         if keys[pygame.K_RIGHT]:
-            playerKar2.moveRight(5)
+            player_kar2.moveRight(5)
         if keys[pygame.K_ESCAPE]:
             resetGame()    
             playMusic("main")
@@ -1186,8 +1196,8 @@ def versusLoop():
         # rederizar telas
         lands_group.draw(screen)
         enemy_car_group.draw(screen)
-        kar_group.draw(screen)
-        kar_group2.draw(screen)         
+        player_car_group.draw(screen)
+        player_car_group2.draw(screen)         
         heart_group.draw(screen)
 
         # mostrar informações no canto superior direto da tela
@@ -1199,15 +1209,15 @@ def versusLoop():
         
         # garantir que tudo se mova no mapa
         for car in enemy_car_group:
-            car.moveForward()
+            car.move_forward()
         for heart in heart_group:
-           heart.moveForward()
+           heart.move_forward()
 
         ##### COLISIONS #####
         
         # car and enemies
-        car_collision_list = pygame.sprite.spritecollide(playerKar, enemy_car_group,False,pygame.sprite.collide_mask)
-        car_collision_list2 = pygame.sprite.spritecollide(playerKar2, enemy_car_group,False,pygame.sprite.collide_mask)
+        car_collision_list = pygame.sprite.spritecollide(player_kar, enemy_car_group,False,pygame.sprite.collide_mask)
+        car_collision_list2 = pygame.sprite.spritecollide(player_kar2, enemy_car_group,False,pygame.sprite.collide_mask)
         
         if car_collision_list:
             crash_versus(True)
@@ -1218,8 +1228,8 @@ def versusLoop():
             crash_versus2(False)
 
         # car and heart
-        heart_collision = pygame.sprite.spritecollide(playerKar ,heart_group,True,pygame.sprite.collide_mask)
-        heart_collision2 = pygame.sprite.spritecollide(playerKar2 ,heart_group,True,pygame.sprite.collide_mask)
+        heart_collision = pygame.sprite.spritecollide(player_kar ,heart_group,True,pygame.sprite.collide_mask)
+        heart_collision2 = pygame.sprite.spritecollide(player_kar2 ,heart_group,True,pygame.sprite.collide_mask)
 
         if heart_collision:
             heart_action()
