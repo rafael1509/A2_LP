@@ -70,12 +70,18 @@ enemy_car_group = pygame.sprite.Group()
 
 class thing(pygame.sprite.Sprite):
     '''
-    
+    Essa classe é responsável pelos objetos que aparecem na pista, como diamantes e vidas extras.
     '''
-    def __init__(self, lane, type):
+    def __init__(self, lane, tipo):
+        '''
+        :param lane: posição em que o carro vai nascer
+        :type lane: int  
+        :param tipo: "diamond" ou "heart". Necessário identificar o objeto para selecionar o sprite correto
+        :type tipo: str      
+        '''
         super().__init__()
 
-        if type == 'diamond':
+        if tipo == 'diamond':
             self.image = pygame.image.load(directory + "\\sprites\\diamond.png").convert_alpha()
 
         else: #heart
@@ -98,13 +104,12 @@ diamond_group = pygame.sprite.Group()
 heart_group = pygame.sprite.Group()
             
 class player_car(pygame.sprite.Sprite):
-    
+    '''
+    Essa classe é responsável pelo carro do jogador.
+    '''    
     def __init__(self):
         super().__init__()
-        
-        # picture = pygame.image.load(directory+"\\sprites\\—Pngtree—red sport car png_8280576.png")
-        # picture = pygame.transform.scale(picture, (65, 65))
-        # self.image = picture.convert_alpha()
+
         self.image = pygame.image.load(directory + "\\sprites\\kar.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = 400
@@ -123,13 +128,12 @@ player_car_group = pygame.sprite.Group()
 player_car_group.add(player_kar)
 
 class kar2(pygame.sprite.Sprite):
-    
+    '''
+    Essa classe é responsável pelo carro do jogador 2 no modo versus.
+    '''       
     def __init__(self):
         super().__init__()
-        
-        # picture = pygame.image.load(directory+"\\sprites\\—Pngtree—red sport car png_8280576.png")
-        # picture = pygame.transform.scale(picture, (65, 65))
-        # self.image = picture.convert_alpha()
+
         self.image = pygame.image.load(directory + "\\sprites\\kar2.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = 450
