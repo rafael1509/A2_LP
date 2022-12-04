@@ -4,3 +4,4 @@
  - aparecer a linha de contra mao
  - trocar nome das variaveis
  - novas imagens
+ - instruções
