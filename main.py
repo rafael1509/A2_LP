@@ -13,6 +13,7 @@ remaining_life = 3
 remaining_life2 = 3
 points = 0
 pointz = 0
+extra_point = 0
 date = str
 speed = 5
 first = True
@@ -489,34 +490,38 @@ def display_info():
     velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
     screen.blit(velocidade, (590, 110))
 
-def display_info_versus():
+def display_info():
     '''
-    mostra informações sobre os jogadores no modo versus do jogo
+    mostra informações sobre nome do jogador, vidas restantes, pontuação e velocidade no canto superior direito da tela
     '''
     
-    global remaining_life, remaining_life, points, speed
+    global remaining_life, user_name, points, pointz, speed, player_kar, extra_point
+    if player_kar.rect.x < 500:
+        points += 1
+        pointz += 2
+        extra_point +=2 
+    else:
+        points += 1
+        extra_point = 0
 
-    points += 1
-    if points % 400 == 1:
+    if points % 1000 == 0:
         speed +=1
     
-    nome = myfont.render("Jogador 2", 1, WHITE, BLACK)
-    screen.blit(nome, (610, 20))     
-    
-    vida = myfont.render("Vidas: " + str(remaining_life2), 1, WHITE, BLACK)
-    screen.blit(vida, (610, 50))
-
-    velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
-    screen.blit(velocidade, (610, 80))
-
-    nome = myfont.render("Jogador 1", 1, WHITE, BLACK)
-    screen.blit(nome, (10, 20))     
+    nome = myfont.render("Nome: " + str(user_name), 1, WHITE, BLACK)
+    screen.blit(nome, (590, 20))     
     
     vida = myfont.render("Vidas: " + str(remaining_life), 1, WHITE, BLACK)
-    screen.blit(vida, (10, 50))
+    screen.blit(vida, (590, 50))
+
+    pontos = myfont.render("Pontuação: " + str(points+pointz), 1, WHITE, BLACK)
+    screen.blit(pontos, (590, 80))
 
     velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
-    screen.blit(velocidade, (10, 80))
+    screen.blit(velocidade, (590, 110))
+
+    extra = myfont.render("Bônus: " + str(extra_point), 1, GREEN, BLACK)
+    if player_kar.rect.x < 500:
+        screen.blit(extra, (590, 140))
     
 
 cars_out = diamonds_out = 0 # variáveis criadas para controlar o numero de coisas que nascem
