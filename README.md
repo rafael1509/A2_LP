@@ -1,4 +1,4 @@
  # A fazer
  
- - mais mapas
- - ganhar pointz ao andar na contra mao
+ - mostrar quanto de ponto extra ganha
+ - aparecer a linha de contra mao
