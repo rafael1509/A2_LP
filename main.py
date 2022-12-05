@@ -7,7 +7,7 @@ clock=pygame.time.Clock()
 directory = os.path.dirname(os.path.realpath(__file__))
 
 
-## Variáveis globais
+### VARIÁVEIS GLOBAIS ###
 user_name = str
 remaining_life = 3
 remaining_life2 = 3
@@ -23,7 +23,7 @@ lands_group = 0
 Background_level = "levelBackground"
 
 
-########## CLASSES, INSTANCES, GROUPS ########## 
+### CLASSES ### 
 
 class car(pygame.sprite.Sprite):
     '''
@@ -153,7 +153,9 @@ player_car_group2 = pygame.sprite.Group()
 player_car_group2.add(player_kar2)
 
 class landscape(pygame.sprite.Sprite):
-    
+    '''
+    Essa classe é responsável pela paisagem de Copacabana, renderizando e movendo a imagem 
+    '''       
     global speed, Background_level, lands01, lands02, lands_group
     
     def __init__(self, y):
@@ -229,58 +231,84 @@ class button():
         self.height = height
         self.text = text
 
-    def draw_button(self,win,outline=None):
+    def draw_button(self,janela,outline=None):
         '''
-        :param win: definir a posição do botão
-        :type win: tuple
+        Função responsável por desenhar o butão na tela
+
+        :param janela: é a janela do jogo. Definida em 'pygame.display.set_mode(size)' nas game_configs
+        :type janela: class 'pygame.Surface'
+        :param outline: qual a cor da borda (cores já definidas: RED, GREEN, BLUE, GREY, WHITE, BLACK, MAGENTA)
+        :type outline: tuple
         '''
         if outline:
-            pygame.draw.rect(win, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
+            pygame.draw.rect(janela, outline, (self.x-2,self.y-2,self.width+4,self.height+4),0)
             
-        pygame.draw.rect(win, self.color, (self.x,self.y,self.width,self.height),0)
+        pygame.draw.rect(janela, self.color, (self.x,self.y,self.width,self.height),0)
         
         if self.text != '':
             text = myfont.render(self.text, 1, (0,0,0))
-            win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
+            janela.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
         pos = pygame.mouse.get_pos()
-        if self.isOver(pos):
+        if self.is_over(pos):
             self.color = WHITE
         else:
             self.color = GREY
 
-    def isOver(self, pos):
+    def is_over(self, pos):
+        '''
+        verifica se o mouse está em cima do botão
+
+        :param pos: posição atual do mouse
+        :type pos: tuple
+        '''
         if pos[0] > self.x and pos[0] < self.x + self.width:
             if pos[1] > self.y and pos[1] < self.y + self.height:
                 return True
-                
         return False    
 
 okBtn = button(RED, 250, 300, 200, 25, "ok")
 
-class InputBox:
-    
-    COLOR_INACTIVE = BLACK
-    COLOR_ACTIVE = WHITE
+class input_text:
+    '''
+    Classe responsável pela caixa de input que recolhe o nome do usuário
+    '''
+    inactive_color = BLACK
+    active_color = WHITE
 
     def __init__(self, x, y, w, h, text=''):
+        '''
+        :param x: posição da caixa no eixo x
+        :type x: int
+        :param y: posição da caixa no eixo y
+        :type y: int
+        :param w: largura da caixa
+        :type w: int
+        :param h: altura da caixa
+        :type h: int       
+        :param text: texto escrito na caixa
+        :type text: str
+        '''
         self.rect = pygame.Rect(x, y, w, h)
-        self.color = InputBox.COLOR_INACTIVE
+        self.color = input_text.inactive_color
         self.text = text
         self.txt_surface = myfont.render(text, True, BLACK)
         self.active = False
 
     def handle_event(self, event):
-        
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            # If the user clicked on the input_box rect.
+        '''
+        Função responsável por lidar com o evento ao ocorrer uma interação com a caixa de input
+
+        :param event: qual o evento que ocorreu
+        :type event: class 'Event'
+        '''
+        if event.type == pygame.MOUSEBUTTONDOWN: # Se o usuário clicou na caixa de input
             if self.rect.collidepoint(event.pos):
-                # Toggle the active variable.
                 self.active = not self.active
             else:
                 self.active = False
-            # Change the current color of the input box.
-            self.color = InputBox.COLOR_ACTIVE if self.active else InputBox.COLOR_INACTIVE
+                
+            self.color = input_text.active_color if self.active else input_text.inactive_color # Mudar a cor da caixa
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:
@@ -296,51 +324,62 @@ class InputBox:
                 self.txt_surface = myfont.render(self.text, True, self.color)
                 
     def update(self):
-        # Resize the box if the text is too long.
+        '''
+        Atualiza o tamanho da caixa conforme o tamanho do texto
+        '''
         width = max(200, self.txt_surface.get_width()+10)
         self.rect.w = width
 
     def draw_input(self, screen):
-        # Blit the text.
+        '''
+        Mostra qual é o input na caixa de input
+
+        :param screen: é a janela do jogo. Definida em 'pygame.display.set_mode(size)' nas game_configs
+        :type screen: class 'pygame.Surface'
+        '''
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
-        # Blit the rect.
         pygame.draw.rect(screen, self.color, self.rect, 2) 
     
-input_box1 = InputBox(400, 300, 140, 32)  
+input_box = input_text(400, 300, 140, 32)  
 
-##### FUNCTIONS #####
 
-##### change scene
+### FUNÇÕES ###
 
 def changescn(scn, text="", btnfnc=""):
+    '''
+    Responsável por mudar a cena atual.
+
+    :param scn: id da cena atual. Possíveis id's: 'menu', 'enter_name', 'main_loop', 'versus_loop', 'instructions', 'map_menu', 'msg', 'scores'.
+    :type scn: str
+    '''
     
-    # ~ continuar haciendo lo mismo que abajo
-    global menu_s, enterName_s, mainLoop_s, versusLoop_s, instructions_s, msg_s, scores_s, mapmenu_s
-    menu_s = enterName_s = mainLoop_s = instructions_s = msg_s = scores_s = mapmenu_s = False
+    # variáveis criadas para auxiliar quando uma cena está acontecendo. Quando True, ela passa a ser executada.
+    global menu_s, enter_name_s, main_loop_s, versus_loop_s, instructions_s, msg_s, scores_s, map_menu_s
+    menu_s = enter_name_s = main_loop_s = instructions_s = msg_s = scores_s = map_menu_s = False
     
     if scn == "menu":
         menu_s = True
         menu()
     
-    elif scn == "enterName":
-        enterName_s = True
-        enterName()
+    elif scn == "enter_name":
+        enter_name_s = True
+        enter_name()
         
-    elif scn == "mainLoop":
-        mainLoop_s = True
-        mainLoop()
+    elif scn == "main_loop":
+        main_loop_s = True
+        main_loop()
     
-    elif scn == "versusLoop":
-        versusLoop_s = True
-        versusLoop()
+    elif scn == "versus_loop":
+        versus_loop_s = True
+        versus_loop()
         
     elif scn == "instructions":
         instructions_s = True
         instructions()
     
-    elif scn == "mapmenu":
-        mapmenu_s = True
-        mapmenu()
+    elif scn == "map_menu":
+        map_menu_s = True
+        map_menu()
         
     elif scn == "msg":
         msg_s = True
@@ -361,20 +400,20 @@ def msg(text,btnfnc):
     label = pygame.font.SysFont('Lucida Console', 30).render(text, 1, BLACK)
     
     if text == "Game Over!":
-        playMusic("stop")
-        resetGame()
+        play_music("stop")
+        reset_game()
         first = True
-        soundGameOver.play()
+        sound_gameover.play()
     elif text == "O Jogador 2 é o Vencedor!":
-        playMusic("stop")
-        resetGame()
+        play_music("stop")
+        reset_game()
         first = True
-        soundVictory_Versus.play()
+        sound_victory_versus.play()
     elif text == "O Jogador 1 é o Vencedor!":
-        playMusic("stop")
-        resetGame()
+        play_music("stop")
+        reset_game()
         first = True
-        soundVictory_Versus.play()
+        sound_victory_versus.play()
         
     while msg_s:
             
@@ -396,14 +435,9 @@ def msg(text,btnfnc):
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 
-                if msgOkBtn.isOver(pos):
-                    if text == "Game Over!":
-                        playMusic("main")
-                    elif text == "O Jogador 2 é o Vencedor!":
-                        playMusic("main")
-                    elif text == "O Jogador 1 é o Vencedor!":
-                        playMusic("main")
-    
+                if msgOkBtn.is_over(pos):
+                    if text == "Game Over!" or text == "O Jogador 2 é o Vencedor!" or text == "O Jogador 1 é o Vencedor!":
+                        play_music("main")
                     changescn(btnfnc)
                     
             if event.type == pygame.KEYDOWN:
@@ -411,8 +445,8 @@ def msg(text,btnfnc):
                 if event.key==pygame.K_ESCAPE:
                     changescn(btnfnc)
 
-##### change music
-def playMusic(music):
+
+def play_music(music):
 
     if music == "main":
         pygame.mixer.music.load(directory + "\\sounds\\music.wav")
@@ -426,28 +460,25 @@ def playMusic(music):
         pygame.mixer.music.stop()
              
             
-##### save score
-sortedData = []
+sorted_data = []
 data = {}
-def saveGame():
-    
-    global sortedData, data, date, points, user_name
+def save_game():
+    '''
+    Salva a pontuação em "Scores"
+    '''
+    global sorted_data, data, date, points, user_name
     
     with open(directory + "\\save\\" + "scores.txt", "r") as f:
         data = json.load(f)
 
-    # add key to dictthings
     data.update({date:{"name":user_name, "points":points, "remaining_life":remaining_life}} )
     
-    # order and clear dict
-    sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
+    sorted_data = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
     try:
-        del data[sortedData[10][0]]
-
+        del data[sorted_data[10][0]]
     except IndexError:
         pass
 
-    # save dict
     with open(directory + "\\save\\" + "scores.txt", "w") as f:
         json.dump(data, f)
 
@@ -460,8 +491,7 @@ def diamond_action():
     global points, speed
  
     points += 1200
-    soundPoints.play()
-    speed += 1
+    sound_points.play()
 
 def heart_action():
     '''
@@ -473,7 +503,7 @@ def heart_action():
     if remaining_life < 5:
         remaining_life += 1
 
-    soundPoints.play()
+    sound_points.play()
 
 def heart_action2():
     '''
@@ -485,34 +515,8 @@ def heart_action2():
     if remaining_life2 < 5:
         remaining_life2 += 1
 
-    soundPoints.play()
+    sound_points.play()
     
-def display_info():
-    '''
-    mostra informações sobre nome do jogador, vidas restantes, pontuação e velocidade no canto superior direito da tela
-    '''
-    
-    global remaining_life, user_name, points, pointz, speed, player_kar
-    if player_kar.rect.x < 500:
-        points += 1
-        pointz += 2
-    else:
-        points += 1
-
-    if points % 1000 == 0:
-        speed +=1
-    
-    nome = myfont.render("Nome: " + str(user_name), 1, WHITE, BLACK)
-    screen.blit(nome, (590, 20))     
-    
-    vida = myfont.render("Vidas: " + str(remaining_life), 1, WHITE, BLACK)
-    screen.blit(vida, (590, 50))
-
-    pontos = myfont.render("Pontuação: " + str(points+pointz), 1, WHITE, BLACK)
-    screen.blit(pontos, (590, 80))
-
-    velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
-    screen.blit(velocidade, (590, 110))
 
 def display_info():
     '''
@@ -551,7 +555,7 @@ def display_info():
 cars_out = diamonds_out = 0 # variáveis criadas para controlar o numero de coisas que nascem
 def launch():
     '''
-    launch car and things
+    lançar carros, corações e diamantes no mapa de forma aleatória
     '''
     global cars_out, diamonds_out
 
@@ -605,8 +609,7 @@ def launch_versus():
         heart_group.add(heart)
         cars_out = 0
 
-        
-##### Crash
+
 aux = False
 def crash(value):
     
@@ -615,7 +618,7 @@ def crash(value):
 
     if value == True and aux == False:
         remaining_life -= 1
-        soundCrash.play()
+        sound_crash.play()
 
         aux = True
         
@@ -623,19 +626,21 @@ def crash(value):
         aux = False
 
     if remaining_life < 1:
-        saveGame()
+        save_game()
         changescn("msg", text="Game Over!", btnfnc="menu")
 
 aux = False
 def crash_versus(value):
-    
+    '''
+    Quando o jogador 1 perde no modo versus
+    '''
     global aux
     global remaining_life, remaining_life2
-    global versusLoop_s
+    global versus_loop_s
 
     if value == True and aux == False:
         remaining_life -= 1
-        soundCrash.play()
+        sound_crash.play()
 
         aux = True
         
@@ -643,20 +648,22 @@ def crash_versus(value):
         aux = False
 
     if remaining_life < 1:
-        versusLoop_s = False
-        resetGame()
+        versus_loop_s = False
+        reset_game()
         changescn("msg", text="O Jogador 2 é o Vencedor!", btnfnc="menu")
 
 aux = False
 def crash_versus2(value):
-    
+    '''
+    Quando o jogador 2 perde no modo versus
+    '''    
     global aux
     global remaining_life, remaining_life2
-    global versusLoop_s
+    global versus_loop_s
 
     if value == True and aux == False:
         remaining_life2 -= 1
-        soundCrash.play()
+        sound_crash.play()
 
         aux = True
         
@@ -664,14 +671,16 @@ def crash_versus2(value):
         aux = False
 
     if remaining_life2 < 1:
-        versusLoop_s = False
-        resetGame()
+        versus_loop_s = False
+        reset_game()
         changescn("msg", text="O Jogador 1 é o Vencedor!", btnfnc="menu")
         
-##### reset game
 
-def resetGame():
-    global user_name, remaining_life, remaining_life2, first, points, pointz, date, speed
+def reset_game():
+    '''
+    Redefine as variáveis quando o jogador perde
+    '''
+    global user_name, remaining_life, remaining_life2, points, pointz, date, speed
     
     for i in enemy_car_group:
         i.kill()
@@ -682,11 +691,10 @@ def resetGame():
     for i in heart_group:
         i.kill()
     
-    user_name = input_box1.text
-    input_box1.text = "" # clear input_box
-    input_box1.txt_surface = myfont.render("", True, input_box1.color) # clear input_box 
+    user_name = input_box.text
+    input_box.text = "" # clear input_box
+    input_box.txt_surface = myfont.render("", True, input_box.color) # clear input_box 
 
-    input_box1.update
     remaining_life = 3
     remaining_life2 = 3
     points = 0
@@ -695,15 +703,14 @@ def resetGame():
    
     now = datetime.now()
     date = now.strftime("%d/%m/%Y %H:%M:%S")
-        
-########## ESCENAS ########## 
 
-##### menu
 
 menu_s = bool
 def menu():
-    
-    global data, sortedData, menu_s, firts
+    '''
+    Responsável pelos menus do jogo. 
+    '''
+    global data, sorted_data, menu_s
 
     playBtn = button(RED, 400, 240, 200, 25, "PLAY")
     playvsBtn = button(RED, 400, 270, 200, 25, "PLAY VERSUS")
@@ -714,11 +721,11 @@ def menu():
 
     with open(directory + "\\save\\" + "scores.txt", "r") as f:
         data = json.load(f)
-    sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar dicionario de dicionarios
+    sorted_data = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar dicionario de dicionarios
 
     while menu_s:
 
-        ##### RENDER #####
+        # renderizar os botões e backgrounds
         screen.blit(menu_background, (0, 0))
         playBtn.draw_button(screen, (0,0,0))
         playvsBtn.draw_button(screen, (0,0,0))
@@ -727,65 +734,52 @@ def menu():
         exitBtn.draw_button(screen, (0,0,0))
 
         if first == False:
-        
             backBtn.draw_button(screen, (0,0,0))
 
-        ##### EVENTOS #####
-        
+        # cuida dos eventos referentes às trocas de menus
         for event in pygame.event.get():
-            pos = pygame.mouse.get_pos() # toma la posicion del mouse
- 
+            pos = pygame.mouse.get_pos() # pega a posição do mouse
             if event.type == pygame.QUIT:
                 menu_s = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 
-                ############ control de los botones
-                
-                if playBtn.isOver(pos):         
-                    changescn("enterName")
-      
-                if instBtn.isOver(pos):
-                    changescn("instructions")
-                
-                if exitBtn.isOver(pos):
-                    menu_s = False
-                    
-                if backBtn.isOver(pos):
-                    changescn("mainLoop")
-                
-                if playvsBtn.isOver(pos):         
-                    changescn("versusLoop")
-                    
-                if scoresBtn.isOver(pos):
+                # controlar os botões                
+                if playBtn.is_over(pos):         
+                    changescn("enter_name")     
+                if instBtn.is_over(pos):
+                    changescn("instructions")                
+                if exitBtn.is_over(pos):
+                    menu_s = False                    
+                if backBtn.is_over(pos):
+                    changescn("main_loop")               
+                if playvsBtn.is_over(pos):         
+                    changescn("versus_loop")                    
+                if scoresBtn.is_over(pos):
                     changescn("scores")
                     
             if event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_ESCAPE: 
                     menu_s = False
                     
-
-
         # Refresh Screen
         pygame.display.flip()
 
-mapmenu_s = bool
-def mapmenu():
-    
-    global data, sortedData, menu_s, firts, Background_level, speed, lands01, lands02, lands_group, screen
+map_menu_s = bool
+def map_menu():
+    '''
+    Responsável pelo menu da escolha dos mapas 
+    '''    
+    global data, sorted_data, menu_s, lands01, lands02, lands_group, screen
 
     CopacabanaBtn = button(RED, 300, 270, 400, 25, "COPACABANA")
     IpanemaBtn = button(RED, 300, 300, 400, 25, "IPANEMA")
     AvriobrancoBtn = button(RED, 300, 330, 400, 25, "AVENIDA RIO BRANCO")
     backBtn = button(RED, 650, 450, 200, 25, "Back")
 
-    with open(directory + "\\save\\" + "scores.txt", "r") as f:
-        data = json.load(f)
-    sortedData = sorted(data.items(), key=lambda x: x[1]['points'], reverse=True) # ordenar diccionario de diccionarios
+    while map_menu_s:
 
-    while mapmenu_s:
-
-        ##### RENDER #####
+        # renderizar os botões e backgrounds
         screen.blit(menu_background, (0, 0))
         CopacabanaBtn.draw_button(screen, (0,0,0))
         IpanemaBtn.draw_button(screen, (0,0,0))
@@ -793,53 +787,49 @@ def mapmenu():
         backBtn.draw_button(screen, (0,0,0))
 
         if first == False:
-        
             backBtn.draw_button(screen, (0,0,0))
 
-        ##### EVENTOS #####
-        
+        # cuida dos eventos referentes às trocas de menus
         for event in pygame.event.get():
-            pos = pygame.mouse.get_pos()
+            pos = pygame.mouse.get_pos() # pega a posição do mouse
  
             if event.type == pygame.QUIT:
                 menu_s = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 
-                ############ control de los botones
-                
-                if CopacabanaBtn.isOver(pos):
+                # controlar os botões
+                if CopacabanaBtn.is_over(pos):
                     landscape(0)
                     lands01 = landscape(-5000) 
                     lands02 = landscape(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
                     lands_group.add(lands02)
-                    changescn("mainLoop")
-                    
-      
-                if IpanemaBtn.isOver(pos):
+                    changescn("main_loop")
+     
+                if IpanemaBtn.is_over(pos):
                     landscape2(0)
                     lands01 = landscape2(-5000) 
                     lands02 = landscape2(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
                     lands_group.add(lands02)
-                    changescn("mainLoop")
+                    changescn("main_loop")
                 
-                if backBtn.isOver(pos):
-                    resetGame()
+                if backBtn.is_over(pos):
+                    reset_game()
                     changescn("menu")
                     
-                if AvriobrancoBtn.isOver(pos):
+                if AvriobrancoBtn.is_over(pos):
                     landscape3(0)
                     lands01 = landscape3(-2500) 
                     lands02 = landscape3(0) 
                     lands_group = pygame.sprite.Group()
                     lands_group.add(lands01) 
                     lands_group.add(lands02)
-                    changescn("mainLoop")
-                    changescn("mainLoop")
+                    changescn("main_loop")
+                    changescn("main_loop")
                     
             if event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_ESCAPE: 
@@ -848,88 +838,58 @@ def mapmenu():
         # Refresh Screen
         pygame.display.flip()
        
-##### scores
-   
+
 scores_s = bool
 def scores():
-
+    '''
+    Responsável pelo menu das pontuações
+    '''
     global data
-
+    
     tag = "NAME".ljust(10) + "POINTS".center(10) + "DATE".rjust(10)
 
-    if len(sortedData) > 0:
-        place0 = str(data[(sortedData[0][0])]["name"].ljust(10) + str(data[(sortedData[0][0])]["points"]).center(10) + str(sortedData[0][0]).rjust(25))
+    if len(sorted_data) > 0:
+        place0 = str(data[(sorted_data[0][0])]["name"].ljust(10) + str(data[(sorted_data[0][0])]["points"]).center(10) + str(sorted_data[0][0]).rjust(25))
     else:
-        place0 = "Empty"
+        place0 = "-"
         
-    if len(sortedData) > 1:
-        place1 = str(data[(sortedData[1][0])]["name"].ljust(10) + str(data[(sortedData[1][0])]["points"]).center(10) + str(sortedData[1][0]).rjust(25))
+    if len(sorted_data) > 1:
+        place1 = str(data[(sorted_data[1][0])]["name"].ljust(10) + str(data[(sorted_data[1][0])]["points"]).center(10) + str(sorted_data[1][0]).rjust(25))
     else:
-        place1 = "Empty"
+        place1 = "-"
         
-    if len(sortedData) > 2:
-        place2 = str(data[(sortedData[2][0])]["name"].ljust(10) + str(data[(sortedData[2][0])]["points"]).center(10) + str(sortedData[2][0]).rjust(25))
+    if len(sorted_data) > 2:
+        place2 = str(data[(sorted_data[2][0])]["name"].ljust(10) + str(data[(sorted_data[2][0])]["points"]).center(10) + str(sorted_data[2][0]).rjust(25))
     else:
-        place2 = "Empty"
+        place2 = "-"
         
-    if len(sortedData) > 3:
-        place3 = str(data[(sortedData[3][0])]["name"].ljust(10) + str(data[(sortedData[3][0])]["points"]).center(10) + str(sortedData[3][0]).rjust(25))
+    if len(sorted_data) > 3:
+        place3 = str(data[(sorted_data[3][0])]["name"].ljust(10) + str(data[(sorted_data[3][0])]["points"]).center(10) + str(sorted_data[3][0]).rjust(25))
     else:
-        place3 = "Empty"
+        place3 = "-"
         
-    if len(sortedData) > 4:
-        place4 = str(data[(sortedData[4][0])]["name"].ljust(10) + str(data[(sortedData[4][0])]["points"]).center(10) + str(sortedData[4][0]).rjust(25))
+    if len(sorted_data) > 4:
+        place4 = str(data[(sorted_data[4][0])]["name"].ljust(10) + str(data[(sorted_data[4][0])]["points"]).center(10) + str(sorted_data[4][0]).rjust(25))
     else:
-        place4 = "Empty"
-        
-    if len(sortedData) > 5:
-        place5 = str(data[(sortedData[5][0])]["name"].ljust(10) + str(data[(sortedData[5][0])]["points"]).center(10) + str(sortedData[5][0]).rjust(25))
-    else:
-        place5 = "Empty"
-        
-    if len(sortedData) > 6:
-        place6 = str(data[(sortedData[6][0])]["name"].ljust(10) + str(data[(sortedData[6][0])]["points"]).center(10) + str(sortedData[6][0]).rjust(25))
-    else:
-        place6 = "Empty"  
+        place4 = "-"
 
-    if len(sortedData) > 7:
-        place7 = str(data[(sortedData[7][0])]["name"].ljust(10) + str(data[(sortedData[7][0])]["points"]).center(10) + str(sortedData[7][0]).rjust(25))
-    else:
-        place7 = "Empty"
-        
-    if len(sortedData) > 8:
-        place8 = str(data[(sortedData[8][0])]["name"].ljust(10) + str(data[(sortedData[8][0])]["points"]).center(10) + str(sortedData[8][0]).rjust(25))
-    else:
-        place8 = "Empty"
-        
-    if len(sortedData) > 9:
-        place9 = str(data[(sortedData[9][0])]["name"].ljust(10) + str(data[(sortedData[9][0])]["points"]).center(10) + str(sortedData[9][0]).rjust(25))
-    else:
-        place9 = "Empty"
 
     scoresOk = button(RED, 150, 450, 200, 25, "Back")
     scoresClear = button(RED, 450, 450, 200, 25, "Clear Score")
-    scoresTitle = myfont.render("SCORES - TOP10", 1, WHITE, BLUE)
+    scoresTitle = myfont.render("SCORES - TOP 5", 1, WHITE, BLUE)
     tag2 = myfont.render(tag, 1, WHITE, BLUE)
     score0 = myfont.render(place0, 1, WHITE)
     score1 = myfont.render(place1, 1, WHITE)
     score2 = myfont.render(place2, 1, WHITE)
     score3 = myfont.render(place3, 1, WHITE)
     score4 = myfont.render(place4, 1, WHITE)
-    score5 = myfont.render(place5, 1, WHITE)
-    score6 = myfont.render(place6, 1, WHITE)
-    score7 = myfont.render(place7, 1, WHITE)
-    score8 = myfont.render(place8, 1, WHITE)
-    score9 = myfont.render(place9, 1, WHITE)
 
     global scores_s
     while scores_s:
 
-        ##### RENDER #####
+        # renderizar os botões e backgrounds
         screen.fill(MAGENTA)
-        
         pygame.draw.rect(screen,BLACK,(90,20,600,400))
-        
         screen.blit(scoresTitle, (100, 30))
         screen.blit(tag2, (100, 80))
         screen.blit(score0, (100, 120))
@@ -937,17 +897,10 @@ def scores():
         screen.blit(score2, (100, 180))
         screen.blit(score3, (100, 210))
         screen.blit(score4, (100, 240))
-        screen.blit(score5, (100, 270))
-        screen.blit(score6, (100, 300))
-        screen.blit(score7, (100, 330))
-        screen.blit(score8, (100, 360))
-        screen.blit(score9, (100, 390))
-        
         scoresOk.draw_button(screen, (0,0,0))
         scoresClear.draw_button(screen, (0,0,0))
 
-        ##### EVENTS #####
-        
+        # cuida dos eventos referentes às trocas de menus
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos() 
  
@@ -959,27 +912,28 @@ def scores():
                     changescn("menu")
 
             if event.type == pygame.MOUSEBUTTONDOWN:          
-                if scoresOk.isOver(pos):
+                if scoresOk.is_over(pos):
                     changescn("menu")
                     
-                elif scoresClear.isOver(pos):
-                    clearScores()
+                elif scoresClear.is_over(pos):
+                    clear_scores()
 
         # Refresh Screen
         pygame.display.flip()
         
-def clearScores():
-    
-    global data, sortedData
+def clear_scores():
+    '''
+    Responsável por resetar as scores salvas
+    '''    
+    global data, sorted_data
     data.clear()
-    sortedData.clear()
+    sorted_data.clear()
     
     with open(directory + "\\save\\" + "scores.txt", "w") as f:
         json.dump(data, f)
 
     changescn("scores")
     
-##### instructions
 
 instructions_s = bool
 def instructions():
@@ -1019,7 +973,7 @@ def instructions():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 
-                if backBtn.isOver(pos):
+                if backBtn.is_over(pos):
                     changescn("menu")
                     
             if event.type == pygame.QUIT:
@@ -1029,94 +983,88 @@ def instructions():
                 if event.key==pygame.K_ESCAPE: #Pressing the esc Key will quit the game
                     changescn("menu")
 
-##### enter name
 
-enterName_s = False
-def enterName():
-
-    global enterName_s, user_text, first, remaining_life, speed
+enter_name_s = False
+def enter_name():
+    '''
+    Responsável pela tela onde coloca o jogador coloca seu user name. 
+    '''
+    global enter_name_s, first, remaining_life, speed
     
     enterOkBtn = button(RED, 400, 350, 200, 25, "OK")
     enterBackBtn = button(RED, 650, 450, 200, 25, "Back")
+    labelenter_name = myfont.render("Enter user name:", 1, BLACK)
 
-    labelEnterName = myfont.render("Enter user name:", 1, BLACK)
+    while enter_name_s:
 
-    while enterName_s:
-
-        ##### RENDER #####
-        
+        # renderizar os botões e backgrounds
         screen.blit(menu_background, (0, 0)) 
         enterOkBtn.draw_button(screen, (0,0,0)) 
         enterBackBtn.draw_button(screen, (0,0,0))
+        screen.blit(labelenter_name, (400, 270))  
+        input_box.update()
+        input_box.draw_input(screen)
 
-        screen.blit(labelEnterName, (400, 270))  
-        
-        input_box1.update()
-        input_box1.draw_input(screen) 
-
-        ##### EVENTOS #####
-        
+        # cuida dos eventos referentes às trocas de menus        
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos() 
-            input_box1.handle_event(event)
+            input_box.handle_event(event)
             
+            # controlar os botões
             if event.type == pygame.MOUSEBUTTONDOWN:
-                
-                ############ control de los botones
-                
-                if enterOkBtn.isOver(pos):
-                    
-                    if input_box1.text == "":
-                        changescn("msg", text="You have to enter name", btnfnc="enterName")
-                    
-                    elif input_box1.text == "INVINCIBLE":
-                        first = False
-                        resetGame()
-                        remaining_life += 97
-                        changescn("mapmenu")
-                    
-                    elif input_box1.text == "I AM SPEED":
-                        first = False
-                        resetGame()
-                        speed += 10
-                        changescn("mapmenu")
 
-                    elif input_box1.text == "ROCKETMAN":
+                if enterOkBtn.is_over(pos):
+                    if input_box.text == "":
+                        changescn("msg", text="You have to enter name", btnfnc="enter_name")
+                    
+                    elif input_box.text == "INVINCIBLE": # easter egg
                         first = False
-                        resetGame()
+                        reset_game()
+                        remaining_life += 97
+                        changescn("map_menu")
+                    
+                    elif input_box.text == "I AM SPEED": # easter egg
+                        first = False
+                        reset_game()
+                        speed += 10
+                        changescn("map_menu")
+
+                    elif input_box.text == "ROCKETMAN": # easter egg
+                        first = False
+                        reset_game()
                         speed += 995
-                        changescn("mapmenu") 
+                        changescn("map_menu") 
                             
                     else:
                         first = False
-                        resetGame()
-                        changescn("mapmenu")
+                        reset_game()
+                        changescn("map_menu")
          
-                if enterBackBtn.isOver(pos):
+                if enterBackBtn.is_over(pos):
                     changescn("menu")
             
             if event.type==pygame.QUIT:
-                enterName_s = False
+                enter_name_s = False
                 
             if event.type == pygame.KEYDOWN:                
                 if event.key==pygame.K_ESCAPE:
                     changescn("menu")
-      
-        ###########################
 
         # Refresh Screen
         pygame.display.flip()
 
-##### main loop
-count_time = 0
-mainLoop_s = bool
-def mainLoop():
 
-    global mainLoop_s, first, count_time, size, speed
+count_time = 0
+main_loop_s = bool
+def main_loop():
+    '''
+    Responsável por garantir que o jogo funcione em um loop, chamando as funções necessárias sempre que for necessário
+    '''
+    global main_loop_s, count_time
     
-    playMusic("engine")
-    
-    while mainLoop_s:
+    play_music("engine")
+
+    while main_loop_s:
 
         # controlar launch de itens
         count_time += 1
@@ -1127,7 +1075,7 @@ def mainLoop():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                mainLoop_s = False
+                main_loop_s = False
  
         # resonder quando teclas forem pressionadas
         keys = pygame.key.get_pressed()
@@ -1136,8 +1084,8 @@ def mainLoop():
         if keys[pygame.K_d]:
             player_kar.moveRight(5)         
         if keys[pygame.K_ESCAPE]:
-            saveGame()
-            playMusic("main")
+            save_game()
+            play_music("main")
             changescn("menu")
 
         # rederizar telas
@@ -1150,7 +1098,6 @@ def mainLoop():
         # mostrar informações no canto superior direto da tela
         display_info()
         
-
         lands01.play()
         lands02.play()
         
@@ -1161,10 +1108,8 @@ def mainLoop():
            diamond.move_forward()
         for heart in heart_group:
            heart.move_forward()
-
-        ##### COLISIONS #####
         
-        # car and enemies
+        # colisão entre o carro do jogador e carros inimigos
         car_collision_list = pygame.sprite.spritecollide(player_kar, enemy_car_group,False,pygame.sprite.collide_mask)
         
         if car_collision_list:
@@ -1172,32 +1117,31 @@ def mainLoop():
         else:
             crash(False)
 
-        # car and diamond
+        # colisão entre o carro do jogador e diamantes
         diamond_collision = pygame.sprite.spritecollide(player_kar, diamond_group,True,pygame.sprite.collide_mask)
         
         if diamond_collision:
             diamond_action()
 
-        # car and heart
+        # colisão entre o carro do jogador e corações
         heart_collision = pygame.sprite.spritecollide(player_kar ,heart_group,True,pygame.sprite.collide_mask)
         if heart_collision:
             heart_action()
 
         #Refresh Screen
-        
         pygame.display.flip()
-        clock.tick(60) # This method should be called once per frame // aprox 16 - 17 fps
+        clock.tick(60)
         
-##### versus loop
-count_time = 0
-versusLoop_s = bool
-def versusLoop():
 
-    global versusLoop_s, first, count_time, size, speed
+count_time = 0
+versus_loop_s = bool
+def versus_loop():
+
+    global main_loop_s, count_time
     
-    playMusic("engine")
+    play_music("engine")
     
-    while versusLoop_s:
+    while versus_loop_s:
 
         # controlar launch de itens
         count_time += 1
@@ -1208,7 +1152,7 @@ def versusLoop():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                versusLoop_s = False
+                versus_loop_s = False
  
         # resonder quando teclas forem pressionadas
         keys = pygame.key.get_pressed()
@@ -1221,8 +1165,8 @@ def versusLoop():
         if keys[pygame.K_RIGHT]:
             player_kar2.moveRight(5)
         if keys[pygame.K_ESCAPE]:
-            resetGame()    
-            playMusic("main")
+            reset_game()    
+            play_music("main")
             changescn("menu")
 
 
@@ -1276,6 +1220,6 @@ def versusLoop():
 
 #################################################################
 
-playMusic("main")
+play_music("main")
 menu()
 pygame.quit()
