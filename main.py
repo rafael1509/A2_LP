@@ -351,6 +351,10 @@ def changescn(scn, text="", btnfnc=""):
 
     :param scn: id da cena atual. Possíveis id's: 'menu', 'enter_name', 'main_loop', 'versus_loop', 'instructions', 'map_menu', 'msg', 'scores'.
     :type scn: str
+    :param text: mensagem que aparece quando o jogador perde
+    :type text: str
+    :param btnfnc: id relacionada ao botão com a função de voltar ao menu
+    :type btnfnc: str
     '''
     
     # variáveis criadas para auxiliar quando uma cena está acontecendo. Quando True, ela passa a ser executada.
@@ -393,7 +397,14 @@ def changescn(scn, text="", btnfnc=""):
 
 msg_s = True
 def msg(text,btnfnc):
-    
+    '''
+    Responsável pela tela de fim de jogo
+
+    :param text: mensagem que aparece quando o jogador perde
+    :type text: str
+    :param btnfnc: id relacionada ao botão com a função de voltar ao menu
+    :type btnfnc: str
+    '''
     global msg_s, first
     
     msgOkBtn = button(RED, SCREENWIDTH/2 - 100, SCREENHEIGHT/2, 200, 25, "ok")
