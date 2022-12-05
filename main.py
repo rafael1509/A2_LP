@@ -25,7 +25,7 @@ Background_level = "levelBackground"
 
 ### CLASSES ### 
 
-class car(pygame.sprite.Sprite):
+class enemy_car(pygame.sprite.Sprite):
     '''
     Essa classe é responsável pelos carros que atuam como obstáculos para o jogador
     '''
@@ -575,7 +575,7 @@ def launch():
         invert = True
 
     if cars_out < 5:
-        enemy_car = car(lane, invert)
+        enemy_car =enemy_car(lane, invert)
         enemy_car_group.add(enemy_car)
         cars_out += 1
         
@@ -607,7 +607,7 @@ def launch_versus():
         invert = True
 
     if cars_out < 5:
-        enemy_car = car(lane, invert)
+        enemy_car = enemy_car(lane, invert)
         enemy_car_group.add(enemy_car)
         cars_out += 1
     
