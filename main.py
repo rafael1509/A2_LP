@@ -25,7 +25,7 @@ Background_level = "levelBackground"
 
 ### CLASSES ### 
 
-class enemy_car(pygame.sprite.Sprite):
+class car(pygame.sprite.Sprite):
     '''
     Essa classe é responsável pelos carros que atuam como obstáculos para o jogador
     '''
@@ -114,7 +114,7 @@ class player_car(pygame.sprite.Sprite):
         self.image = pygame.image.load(directory + "\\sprites\\kar.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = 400
-        self.rect.y = 400
+        self.rect.y = 500
         
     def moveRight(self, pixels):
         if self.rect.x < 650:
@@ -138,7 +138,7 @@ class player2_car(pygame.sprite.Sprite):
         self.image = pygame.image.load(directory + "\\sprites\\kar2.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = 450
-        self.rect.y = 400
+        self.rect.y = 500
         
     def moveRight(self, pixels):
         if self.rect.x < 650:
@@ -357,8 +357,8 @@ def changescn(scn, text="", btnfnc=""):
     '''
     
     # variáveis criadas para auxiliar quando uma cena está acontecendo. Quando True, ela passa a ser executada.
-    global menu_s, enter_name_s, main_loop_s, versus_loop_s, instructions_s, msg_s, scores_s, map_menu_s
-    menu_s = enter_name_s = main_loop_s = instructions_s = msg_s = scores_s = map_menu_s = False
+    global menu_s, enter_name_s, main_loop_s, versus_loop_s, instructions_s, msg_s, scores_s, map_menu_s, map_menu_versus_s
+    menu_s = enter_name_s = main_loop_s = instructions_s = msg_s = scores_s = map_menu_s = map_menu_versus_s = False
     
     if scn == "menu":
         menu_s = True
@@ -383,6 +383,10 @@ def changescn(scn, text="", btnfnc=""):
     elif scn == "map_menu":
         map_menu_s = True
         map_menu()
+    
+    elif scn == "map_menu_versus":
+        map_menu_versus_s = True
+        map_menu_versus()
         
     elif scn == "msg":
         msg_s = True
@@ -557,7 +561,36 @@ def display_info():
     extra = myfont.render("Bônus: " + str(extra_point), 1, GREEN, BLACK)
     if player_kar.rect.x < 500:
         screen.blit(extra, (590, 140))
+        
+def display_info_versus():
+    '''
+    mostra informações sobre os jogadores no modo versus do jogo
+    '''
     
+    global remaining_life, remaining_life2, points, speed
+
+    points += 1
+    if points % 400 == 1:
+        speed +=1
+    
+    nome = myfont.render("Jogador 2", 1, WHITE, BLACK)
+    screen.blit(nome, (710, 20))     
+    
+    vida = myfont.render("Vidas: " + str(remaining_life2), 1, WHITE, BLACK)
+    screen.blit(vida, (710, 50))
+
+    velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
+    screen.blit(velocidade, (710, 80))
+
+    nome = myfont.render("Jogador 1", 1, WHITE, BLACK)
+    screen.blit(nome, (10, 20))     
+    
+    vida = myfont.render("Vidas: " + str(remaining_life), 1, WHITE, BLACK)
+    screen.blit(vida, (10, 50))
+
+    velocidade = myfont.render("Velocidade: " + str(speed*10)+"Km/h", 1, WHITE, BLACK)
+    screen.blit(velocidade, (10, 80))
+
 
 cars_out = diamonds_out = 0 # variáveis criadas para controlar o numero de coisas que nascem
 def launch():
@@ -575,7 +608,7 @@ def launch():
         invert = True
 
     if cars_out < 5:
-        enemy_car =enemy_car(lane, invert)
+        enemy_car = car(lane, invert)
         enemy_car_group.add(enemy_car)
         cars_out += 1
         
@@ -606,12 +639,12 @@ def launch_versus():
     if lane < 500:
         invert = True
 
-    if cars_out < 5:
-        enemy_car = enemy_car(lane, invert)
+    if cars_out < 25:
+        enemy_car = car(lane, invert)
         enemy_car_group.add(enemy_car)
         cars_out += 1
     
-    else: # um coração nasce a cada 5 diamantes
+    else: # um coração nasce a cada 25 carros lançados
         heart = thing(lane, "heart")
         heart_group.add(heart)
         cars_out = 0
@@ -761,7 +794,7 @@ def menu():
                 if backBtn.is_over(pos):
                     changescn("main_loop")               
                 if playvsBtn.is_over(pos):         
-                    changescn("versus_loop")                    
+                    changescn("map_menu_versus")                    
                 if scoresBtn.is_over(pos):
                     changescn("scores")
                     
@@ -844,7 +877,78 @@ def map_menu():
 
         # Refresh Screen
         pygame.display.flip()
-       
+
+map_menu_versus_s = bool
+def map_menu_versus():
+    '''
+    Responsável pelo menu da escolha dos mapas 
+    '''    
+    global data, sorted_data, menu_s, lands01, lands02, lands_group, screen
+
+    CopacabanaBtn = button(RED, 300, 270, 400, 25, "COPACABANA")
+    IpanemaBtn = button(RED, 300, 300, 400, 25, "IPANEMA")
+    AvriobrancoBtn = button(RED, 300, 330, 400, 25, "AVENIDA RIO BRANCO")
+    backBtn = button(RED, 650, 450, 200, 25, "Back")
+
+    while map_menu_versus_s:
+
+        # renderizar os botões e backgrounds
+        screen.blit(menu_background, (0, 0))
+        CopacabanaBtn.draw_button(screen, (0,0,0))
+        IpanemaBtn.draw_button(screen, (0,0,0))
+        AvriobrancoBtn.draw_button(screen, (0,0,0))
+        backBtn.draw_button(screen, (0,0,0))
+
+        if first == False:
+            backBtn.draw_button(screen, (0,0,0))
+
+        # cuida dos eventos referentes às trocas de menus
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos() # pega a posição do mouse
+ 
+            if event.type == pygame.QUIT:
+                menu_s = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                # controlar os botões
+                if CopacabanaBtn.is_over(pos):
+                    landscape(0)
+                    lands01 = landscape(-5000) 
+                    lands02 = landscape(0) 
+                    lands_group = pygame.sprite.Group()
+                    lands_group.add(lands01) 
+                    lands_group.add(lands02)
+                    changescn("versus_loop")
+     
+                if IpanemaBtn.is_over(pos):
+                    landscape2(0)
+                    lands01 = landscape2(-5000) 
+                    lands02 = landscape2(0) 
+                    lands_group = pygame.sprite.Group()
+                    lands_group.add(lands01) 
+                    lands_group.add(lands02)
+                    changescn("versus_loop")
+                
+                if backBtn.is_over(pos):
+                    reset_game()
+                    changescn("menu")
+                    
+                if AvriobrancoBtn.is_over(pos):
+                    landscape3(0)
+                    lands01 = landscape3(-2500) 
+                    lands02 = landscape3(0) 
+                    lands_group = pygame.sprite.Group()
+                    lands_group.add(lands01) 
+                    lands_group.add(lands02)
+                    changescn("versus_loop")
+                    
+            if event.type==pygame.KEYDOWN:
+                if event.key==pygame.K_ESCAPE: 
+                    menu_s = False               
+
+        # Refresh Screen
+        pygame.display.flip()       
 
 scores_s = bool
 def scores():
@@ -882,7 +986,7 @@ def scores():
 
 
     scoresOk = button(RED, 150, 450, 200, 25, "Back")
-    scoresClear = button(RED, 450, 450, 200, 25, "Clear Score")
+    scoresClear = button(RED, 650, 450, 200, 25, "Clear Score")
     scoresTitle = myfont.render("SCORES - TOP 5", 1, WHITE, AZUL)
     tag2 = myfont.render(tag, 1, WHITE, AZUL)
     score0 = myfont.render(place0, 1, WHITE)
@@ -1158,7 +1262,7 @@ count_time = 0
 versus_loop_s = bool
 def versus_loop():
 
-    global main_loop_s, count_time
+    global versus_loop_s, count_time
     
     play_music("engine")
     
@@ -1168,7 +1272,7 @@ def versus_loop():
         count_time += 1
         if count_time > 10:
             count_time = 0
-            launch()
+            launch_versus()
 
 
         for event in pygame.event.get():
