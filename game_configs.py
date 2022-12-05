@@ -1,17 +1,13 @@
-'''
-configurações do jogo
-'''
-
 import pygame, os
 
 pygame.init()
 directory = os.path.dirname(os.path.realpath(__file__))
 
 # Configurando sons
-soundCrash = pygame.mixer.Sound(directory + "\\sounds\\crash.wav")
-soundPoints = pygame.mixer.Sound(directory + "\\sounds\\diamond.wav")
-soundVictory_Versus = pygame.mixer.Sound(directory + "\\sounds\\victory_versus.wav")
-soundGameOver = pygame.mixer.Sound(directory + "\\sounds\\gameOver.wav")
+sound_crash = pygame.mixer.Sound(directory + "\\sounds\\crash.wav")
+sound_points = pygame.mixer.Sound(directory + "\\sounds\\diamond.wav")
+sound_victory_versus = pygame.mixer.Sound(directory + "\\sounds\\victory_versus.wav")
+sound_gameover = pygame.mixer.Sound(directory + "\\sounds\\gameOver.wav")
 
 # Configurando a janela
 SCREENWIDTH=1000
@@ -23,7 +19,7 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 
 # Configurando a fonte
-myfont = pygame.font.SysFont('Lucida Console', 20)
+myfont = pygame.font.SysFont('rockwellnegrito', 20)
 
 
 # Configurando menu inicial
