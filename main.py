@@ -320,7 +320,6 @@ class input_text:
                 else:
                     if len(self.text) < 10:
                         self.text += event.unicode
-                # Re-render the text.
                 self.txt_surface = myfont.render(self.text, True, self.color)
                 
     def update(self):
@@ -393,7 +392,6 @@ def changescn(scn, text="", btnfnc=""):
         scores_s = True
         scores()
         
-##### msg system
 
 msg_s = True
 def msg(text,btnfnc):
@@ -432,12 +430,10 @@ def msg(text,btnfnc):
         screen.blit(label, (SCREENWIDTH/2 - label.get_width()/2, SCREENHEIGHT/2 - label.get_height()/2 - 50))
         msgOkBtn.draw_button(screen, BLACK)
         
-        ##### UPDATE #####
-        
+        # Refresh Screen
         pygame.display.flip()
-        
-        ##### EVENTS #####
-        
+
+        # cuida dos eventos referentes às trocas de menus
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
             
@@ -1138,15 +1134,13 @@ def main_loop():
         
         # colisão entre o carro do jogador e carros inimigos
         car_collision_list = pygame.sprite.spritecollide(player_kar, enemy_car_group,False,pygame.sprite.collide_mask)
-        
         if car_collision_list:
             crash(True)
         else:
             crash(False)
 
         # colisão entre o carro do jogador e diamantes
-        diamond_collision = pygame.sprite.spritecollide(player_kar, diamond_group,True,pygame.sprite.collide_mask)
-        
+        diamond_collision = pygame.sprite.spritecollide(player_kar, diamond_group,True,pygame.sprite.collide_mask) 
         if diamond_collision:
             diamond_action()
 
@@ -1216,13 +1210,10 @@ def versus_loop():
             car.move_forward()
         for heart in heart_group:
            heart.move_forward()
-
-        ##### COLISIONS #####
         
-        # car and enemies
+        # colisão entre o carro do jogador e carros inimigos
         car_collision_list = pygame.sprite.spritecollide(player_kar, enemy_car_group,False,pygame.sprite.collide_mask)
         car_collision_list2 = pygame.sprite.spritecollide(player_kar2, enemy_car_group,False,pygame.sprite.collide_mask)
-        
         if car_collision_list:
             crash_versus(True)
         elif car_collision_list2:
@@ -1231,21 +1222,19 @@ def versus_loop():
             crash_versus(False)
             crash_versus2(False)
 
-        # car and heart
+        # colisão entre o carro do jogador e corações
         heart_collision = pygame.sprite.spritecollide(player_kar ,heart_group,True,pygame.sprite.collide_mask)
         heart_collision2 = pygame.sprite.spritecollide(player_kar2 ,heart_group,True,pygame.sprite.collide_mask)
-
         if heart_collision:
             heart_action()
         elif heart_collision2:
             heart_action2()
 
         #Refresh Screen
-        
         pygame.display.flip()
         clock.tick(60)
 
-#################################################################
+
 
 play_music("main")
 menu()
