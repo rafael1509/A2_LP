@@ -1,6 +1,3 @@
-><h1>A FAZER</h1>
-- versus mode
-- msg e changescn
 ><h1>A2_LP</h1>
 
 Nesse repositório, feito para a segunda avaliação de Linguagem de Programação, encontram-se os códigos feitos para a criação de um jogo a partir da biblioteca ``pygame``.
