@@ -876,8 +876,8 @@ def scores():
 
     scoresOk = button(RED, 150, 450, 200, 25, "Back")
     scoresClear = button(RED, 450, 450, 200, 25, "Clear Score")
-    scoresTitle = myfont.render("SCORES - TOP 5", 1, WHITE, BLUE)
-    tag2 = myfont.render(tag, 1, WHITE, BLUE)
+    scoresTitle = myfont.render("SCORES - TOP 5", 1, WHITE, AZUL)
+    tag2 = myfont.render(tag, 1, WHITE, AZUL)
     score0 = myfont.render(place0, 1, WHITE)
     score1 = myfont.render(place1, 1, WHITE)
     score2 = myfont.render(place2, 1, WHITE)
@@ -888,8 +888,8 @@ def scores():
     while scores_s:
 
         # renderizar os botões e backgrounds
-        screen.fill(MAGENTA)
-        pygame.draw.rect(screen,BLACK,(90,20,600,400))
+        screen.fill(LIGHTGREEN)
+        pygame.draw.rect(screen,DARKBLUE,(90,20,825,400))
         screen.blit(scoresTitle, (100, 30))
         screen.blit(tag2, (100, 80))
         screen.blit(score0, (100, 120))
@@ -944,21 +944,20 @@ def instructions():
     
     backBtn = button(RED, 750, 550, 200, 25, "Back")
 
-    label0 = myfont.render("Instruções:", 1, BLACK, YELLOWGREEN)
-    label1 = myfont.render("Modo Single Player", 1, BLACK, YELLOWGREEN)
-    label2 = myfont.render("- Dirija ao longo da rodovia, evite batidas e colete ítens.", 1, BLACK, YELLOWGREEN)
-    label3 = myfont.render("- Use as teclas A e D para mover seu carro.", 1, BLACK, YELLOWGREEN)
-    label4 = myfont.render("- Ganhe 1000 pontos ao coletar diamantes pelo mapa.", 1, BLACK, YELLOWGREEN)
-    label5 = myfont.render("- Ganhe vidas adicionais coletando corações pelo mapa.", 1, BLACK, YELLOWGREEN)
-    label6 = myfont.render("- Marque pontuação extra transitando pela contra-mão.", 1, BLACK, YELLOWGREEN)
-    label7 = myfont.render("- Marque o máximo de pontos que conseguir e coloque seu nome", 1, BLACK, YELLOWGREEN)
-    label8 = myfont.render("  na tabela de Highscores!", 1, BLACK, YELLOWGREEN)
-    label9 = myfont.render("Modo Versus", 1, BLACK, YELLOWGREEN)
-    label10 = myfont.render("- Seja o último jogador a perder todas as vidas.", 1, BLACK, YELLOWGREEN)
-    label11 = myfont.render("- Jogador 1 (vermelho) controla o carro usando as teclas A e D.", 1, BLACK, YELLOWGREEN)
-    label12 = myfont.render("- Jogador 2 (azul) controla o carro usando as teclas", 1, BLACK, YELLOWGREEN)
-    label13 = myfont.render("  LeftArrow (seta esquerda) e RightArrow (seta direita).", 1, BLACK, YELLOWGREEN)
-    label14 = myfont.render("- Colete corações para ganhar vidas extras.", 1, BLACK, YELLOWGREEN)
+    label0 = myfont.render("Instruções:", 1, WHITE, AZUL)
+    label1 = myfont.render("Modo Single Player", 1, WHITE, AZUL)
+    label2 = myfont.render("- Dirija ao longo da rodovia, evite batidas e colete ítens.", 1, WHITE)
+    label3 = myfont.render("- Use as teclas A e D para mover seu carro.", 1, WHITE)
+    label4 = myfont.render("- Ganhe 1000 pontos ao coletar diamantes pelo mapa.", 1, WHITE)
+    label5 = myfont.render("- Ganhe vidas adicionais coletando corações pelo mapa.", 1, WHITE)
+    label6 = myfont.render("- Marque pontuação extra transitando pela contra-mão.", 1, WHITE)
+    label7 = myfont.render("- Marque o máximo de pontos que conseguir e coloque seu nome", 1, WHITE)
+    label8 = myfont.render("  na tabela de Highscores!", 1, WHITE)
+    label9 = myfont.render("Modo Versus", 1, WHITE,AZUL)
+    label10 = myfont.render("- Seja o último jogador a perder todas as vidas.", 1, WHITE)
+    label11 = myfont.render("- Jogador 1 (vermelho) controla o carro usando as teclas A e D.", 1, WHITE)
+    label12 = myfont.render("- Jogador 2 (azul) controla o carro usando as teclas direcionais (setas)", 1, WHITE)
+    label14 = myfont.render("- Colete corações para ganhar vidas extras.", 1, WHITE)
     
     while instructions_s:
         
@@ -978,8 +977,7 @@ def instructions():
         screen.blit(label10, (100, 380))
         screen.blit(label11, (100, 410))
         screen.blit(label12, (100, 440))
-        screen.blit(label13, (100, 460))
-        screen.blit(label14, (100, 490))
+        screen.blit(label14, (100, 470))
         backBtn.draw_button(screen, (0,0,0))
         
 
@@ -1235,7 +1233,8 @@ def versus_loop():
         
         pygame.display.flip()
         clock.tick(60)
-        
+
+#################################################################
 
 play_music("main")
 menu()
