@@ -128,7 +128,7 @@ player_kar = player_car()
 player_car_group = pygame.sprite.Group() 
 player_car_group.add(player_kar)
 
-class kar2(pygame.sprite.Sprite):
+class player2_car(pygame.sprite.Sprite):
     '''
     Essa classe é responsável pelo carro do jogador 2 no modo versus.
     '''       
@@ -148,7 +148,7 @@ class kar2(pygame.sprite.Sprite):
         if self.rect.x > 300:
             self.rect.x -= pixels
 
-player_kar2 = kar2() 
+player_kar2 = player2_car() 
 player_car_group2 = pygame.sprite.Group() 
 player_car_group2.add(player_kar2)
 
