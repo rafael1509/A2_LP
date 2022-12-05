@@ -947,7 +947,7 @@ def instructions():
     label2 = myfont.render("- Dirija ao longo da rodovia, evite batidas e colete ítens.", 1, BLACK, YELLOWGREEN)
     label3 = myfont.render("- Use as teclas A e D para mover seu carro.", 1, BLACK, YELLOWGREEN)
     label4 = myfont.render("- Ganhe 1000 pontos ao coletar diamantes pelo mapa.", 1, BLACK, YELLOWGREEN)
-    label5 = myfont.render("- Ganhe vidas adicionais coletando vidas pelo mapa.", 1, BLACK, YELLOWGREEN)
+    label5 = myfont.render("- Ganhe vidas adicionais coletando corações pelo mapa.", 1, BLACK, YELLOWGREEN)
     label6 = myfont.render("- Marque pontuação extra transitando pela contra-mão.", 1, BLACK, YELLOWGREEN)
     label7 = myfont.render("- Marque o máximo de pontos que conseguir e coloque seu nome", 1, BLACK, YELLOWGREEN)
     label8 = myfont.render("  na tabela de Highscores!", 1, BLACK, YELLOWGREEN)
