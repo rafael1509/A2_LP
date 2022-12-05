@@ -937,7 +937,9 @@ def clear_scores():
 
 instructions_s = bool
 def instructions():
-    
+    '''
+    Responsável pelo menu de instruções.
+    '''
     global instructions_s
     
     backBtn = button(RED, 750, 550, 200, 25, "Back")
@@ -960,11 +962,9 @@ def instructions():
     
     while instructions_s:
         
-        ##### RENDER #####
+        # renderizar os botões e backgrounds
         screen.fill(LIGHTGREEN)
-        
         pygame.draw.rect(screen,DARKBLUE,(25,20,950,510))
-        
         screen.blit(label0, (30, 30))
         screen.blit(label1, (30, 80))
         screen.blit(label2, (100, 130))
@@ -980,16 +980,13 @@ def instructions():
         screen.blit(label12, (100, 440))
         screen.blit(label13, (100, 460))
         screen.blit(label14, (100, 490))
-
-  
         backBtn.draw_button(screen, (0,0,0))
         
-        ##### ACTUALIZACION #####
-        
+
+        # Refresh Screen
         pygame.display.flip()
         
-        ##### EVENTOS #####
-        
+        # cuida dos eventos referentes às trocas de menus
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos() 
             
@@ -1002,7 +999,7 @@ def instructions():
                 instructions_s = False
                 
             elif event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_ESCAPE: #Pressing the esc Key will quit the game
+                if event.key==pygame.K_ESCAPE: # sai do jogo ao pressionar esc
                     changescn("menu")
 
 enter_name_s = False
@@ -1238,8 +1235,7 @@ def versus_loop():
         
         pygame.display.flip()
         clock.tick(60)
-
-#################################################################
+        
 
 play_music("main")
 menu()
