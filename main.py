@@ -940,24 +940,46 @@ def instructions():
     
     global instructions_s
     
-    backBtn = button(RED, 550, 450, 200, 25, "Back")
+    backBtn = button(RED, 750, 550, 200, 25, "Back")
 
-    label0 = myfont.render("Instructions (DEIXAR BONITO E EM PORTUGUÊS):", 1, WHITE, BLUE)
-    label1 = myfont.render("- Drive through the higway and dont crash", 1, WHITE, BLUE)
-    label2 = myfont.render("- Use A and D keys to move your car", 1, WHITE, BLUE)
-    label3 = myfont.render("- Catch all the diamonds you can to earn EXTRA points", 1, WHITE, BLUE)
+    label0 = myfont.render("Instruções:", 1, BLACK, YELLOWGREEN)
+    label1 = myfont.render("Modo Single Player", 1, BLACK, YELLOWGREEN)
+    label2 = myfont.render("- Dirija ao longo da rodovia, evite batidas e colete ítens.", 1, BLACK, YELLOWGREEN)
+    label3 = myfont.render("- Use as teclas A e D para mover seu carro.", 1, BLACK, YELLOWGREEN)
+    label4 = myfont.render("- Ganhe 1000 pontos ao coletar diamantes pelo mapa.", 1, BLACK, YELLOWGREEN)
+    label5 = myfont.render("- Ganhe vidas adicionais coletando vidas pelo mapa.", 1, BLACK, YELLOWGREEN)
+    label6 = myfont.render("- Marque pontuação extra transitando pela contra-mão.", 1, BLACK, YELLOWGREEN)
+    label7 = myfont.render("- Marque o máximo de pontos que conseguir e coloque seu nome", 1, BLACK, YELLOWGREEN)
+    label8 = myfont.render("  na tabela de Highscores!", 1, BLACK, YELLOWGREEN)
+    label9 = myfont.render("Modo Versus", 1, BLACK, YELLOWGREEN)
+    label10 = myfont.render("- Seja o último jogador a perder todas as vidas.", 1, BLACK, YELLOWGREEN)
+    label11 = myfont.render("- Jogador 1 (vermelho) controla o carro usando as teclas A e D.", 1, BLACK, YELLOWGREEN)
+    label12 = myfont.render("- Jogador 2 (azul) controla o carro usando as teclas", 1, BLACK, YELLOWGREEN)
+    label13 = myfont.render("  LeftArrow (seta esquerda) e RightArrow (seta direita).", 1, BLACK, YELLOWGREEN)
+    label14 = myfont.render("- Colete corações para ganhar vidas extras.", 1, BLACK, YELLOWGREEN)
     
     while instructions_s:
         
         ##### RENDER #####
-        screen.fill(MAGENTA)
+        screen.fill(LIGHTGREEN)
         
-        pygame.draw.rect(screen,BLACK,(25,20,750,400))
+        pygame.draw.rect(screen,DARKBLUE,(25,20,950,510))
         
         screen.blit(label0, (30, 30))
-        screen.blit(label1, (100, 100))
-        screen.blit(label2, (100, 150))
-        screen.blit(label3, (100, 250))
+        screen.blit(label1, (30, 80))
+        screen.blit(label2, (100, 130))
+        screen.blit(label3, (100, 160))
+        screen.blit(label4, (100, 190))
+        screen.blit(label5, (100, 220))
+        screen.blit(label6, (100, 250))
+        screen.blit(label7, (100, 280))
+        screen.blit(label8, (100, 300))
+        screen.blit(label9, (30, 350))
+        screen.blit(label10, (100, 380))
+        screen.blit(label11, (100, 410))
+        screen.blit(label12, (100, 440))
+        screen.blit(label13, (100, 460))
+        screen.blit(label14, (100, 490))
 
   
         backBtn.draw_button(screen, (0,0,0))
@@ -982,7 +1004,6 @@ def instructions():
             elif event.type==pygame.KEYDOWN:
                 if event.key==pygame.K_ESCAPE: #Pressing the esc Key will quit the game
                     changescn("menu")
-
 
 enter_name_s = False
 def enter_name():
