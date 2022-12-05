@@ -1,9 +1,6 @@
 ><h1>A FAZER</h1>
-- instruções
 - versus mode
 - msg e changescn
-- launch_versus
-- save game no versus
 ><h1>A2_LP</h1>
 
 Nesse repositório, feito para a segunda avaliação de Linguagem de Programação, encontram-se os códigos feitos para a criação de um jogo a partir da biblioteca ``pygame``.
