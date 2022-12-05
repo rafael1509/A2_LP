@@ -52,10 +52,10 @@ Ao escolher essa opção de início, você iniciará uma partida solo, onde o ob
 >><h3 id=versus>PLAY VERSUS</h3>
 
 Ao escolher essa opção, a partida para dois jogadores irá iniciar, onde o objetivo será ter a maior pontuação que seu adversário para poder ganhar. Nesse modo não há identificação dos jogadores, o que os diferenciará serão as teclas que usam para jogar. Esse modo também conta com a escolha dos mapas. Nesse modo, as teclas para controle dos carros são distribuídas da seguinte forma:
-   >>><h4>Jogador 1</h4>
+   >>><h4>Jogador 1(azul)</h4>
    * <kbd>A</kbd>, move o carro para a esquerda.
    * <kbd>D</kbd>, move o carro para a direita. 
-   >>><h4>Jogador 2</h4>
+   >>><h4>Jogador 2(vermelho)</h4>
    * <kbd>←</kbd>, move o carro para a esquerda.
    * <kbd>→</kbd>, move o carro para a direita. 
 
@@ -80,3 +80,5 @@ Para ter um pouco de acréscimo ao jogo, resolvemos incrementar alguns detalhes 
   * [Rafael dos Santos](https://github.com/rafael1509)
 
   * [Mikael Pereira](https://github.com/G-mikael)
+  
+  * [Douglas Arthur](https://github.com/Doug-boy)
