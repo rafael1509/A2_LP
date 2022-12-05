@@ -1066,8 +1066,8 @@ def instructions():
     label8 = myfont.render("  na tabela de Highscores!", 1, WHITE)
     label9 = myfont.render("Modo Versus", 1, WHITE,AZUL)
     label10 = myfont.render("- Seja o último jogador a perder todas as vidas.", 1, WHITE)
-    label11 = myfont.render("- Jogador 1 (vermelho) controla o carro usando as teclas A e D.", 1, WHITE)
-    label12 = myfont.render("- Jogador 2 (azul) controla o carro usando as teclas direcionais (setas)", 1, WHITE)
+    label11 = myfont.render("- Jogador 1 (azul) controla o carro usando as teclas A e D.", 1, WHITE)
+    label12 = myfont.render("- Jogador 2 (vermelho) controla o carro usando as teclas direcionais (setas)", 1, WHITE)
     label14 = myfont.render("- Colete corações para ganhar vidas extras.", 1, WHITE)
     
     while instructions_s:
