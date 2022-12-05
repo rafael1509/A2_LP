@@ -2,7 +2,6 @@
 - instruções
 - versus mode
 - msg e changescn
-- tratamento de exceção
 - launch_versus
 - save game no versus
 ><h1>A2_LP</h1>
